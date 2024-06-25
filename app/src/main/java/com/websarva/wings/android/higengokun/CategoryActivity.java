@@ -30,12 +30,6 @@ public class CategoryActivity extends AppCompatActivity {
 
     private List<Map<String,String>> _categoryList;
 
-    private final int all = 0;
-    private final int baai = 1;
-    private final int noudo = 2;
-    private final int kakuritu = 3;
-    private final int soneki = 4;
-    private final int daikin = 5;
 
     private Category actionMode = Category.ALL;
 
@@ -117,6 +111,7 @@ public class CategoryActivity extends AppCompatActivity {
         return categoryList;
     }
 
+    //カテゴリーのアップデート
     private void updateCategory(Category category) {
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
@@ -142,6 +137,7 @@ public class CategoryActivity extends AppCompatActivity {
                 default:
                     break;
             }
+            actionMode = category;
         }
     }
 
@@ -171,9 +167,10 @@ public class CategoryActivity extends AppCompatActivity {
     private class ListItemClickListener implements AdapterView.OnItemClickListener{
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-            int pos = Question.getQuestionFromCategory(actionMode,position);
+            if(actionMode != Category.ALL)//アクションモードがallじゃない場合に関数実行
+                position = Question.getQuestionFromCategory(actionMode,position);
             Intent intent = new Intent(CategoryActivity.this, QuestionActivity.class);
-            intent.putExtra("pos",pos);
+            intent.putExtra("pos",position);
             startActivity(intent);
 
         }

@@ -1,5 +1,7 @@
 package com.websarva.wings.android.higengokun.models;
 
+
+
 import com.websarva.wings.android.higengokun.R;
 import com.websarva.wings.android.higengokun.enums.Category;
 
