@@ -1,0 +1,14 @@
+<resources>
+    <string name = "question_baai_1_1">あるサークルには、男性6人と女性4人が所属している。この中から掃除当番を4人選びたい。\n男性だけから4人選ぶとすると、選び方は何通りあるか。</string>
+    <string name = "question_baai_1_2">あるサークルには、男性6人と女性4人が所属している。この中から掃除当番を4人選びたい。\n男性から2人、女性から2人選ぶとすると、選び方は何通りあるか。</string>
+    <string name = "question_baai_2_1">男性4人、女性5人で構成されるチームがある。この中から代表選手の3人を選びたい。\n男性が少なくとも1人は含まれるように選ぶとすると、その選び方は何通りか。</string>
+    <string name = "question_baai_2_2">男性4人、女性5人で構成されるチームがある。この中から代表選手の3人を選びたい。\n男性と女性がそれぞれ少なくとも1人は含まれるように選ぶとすると、その選び方は何通りか。</string>
+    <string name = "question_baai_3_1">P、Q、R、S、Tの5人を1列に並べる。\nPを先頭に並べるとすると、その並び方は何通りか。</string>
+    <string name = "question_baai_3_2">P、Q、R、S、Tの5人を1列に並べる。\nQとRの2人を続けて並べるとすると、その並び方は何通りか。</string>
+    <string name = "question_baai_4_1">P、Q、R、S、T、Uの6人が円形のテーブルのまわりに座らせる。\nP、Qが隣り合わせになるような座り方は何通りか。</string>
+    <string name = "question_baai_4_2">P、Q、R、S、T、Uの6人が円形のテーブルのまわりに座らせる。\nPとQが隣りにならず、RとSが向かい合うような座り方は何通りか。</string>
+    <string name = "question_baai_5_1">0、1、2、3、4の5つの数字を使って、3桁の整数を作る。 同じ数字を何度使ってもよいが、百の位に0を使うことはできない。\n偶数は何通り作れるか。</string>
+    <string name = "question_baai_5_2">0、1、2、3、4の5つの数字を使って、3桁の整数を作る。 同じ数字を何度使ってもよいが、百の位に0を使うことはできない。\n230より小さい数は何通り作れるか。</string>
+    <string name = "question_baai_6">コインを6回連続で投げる。このとき、表が4回出るような表裏の出方は何通りか。</string>
+    <string name = "question_baai_7">青玉が1個、黄玉が2個、赤玉が2個ある。 これらをP、Q、R、S、Tの5人に1個ずつ配るとき、その配り方は何通りか。</string>
+</resources>

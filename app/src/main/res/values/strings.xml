@@ -1,0 +1,26 @@
+<resources>
+    <string name="app_name">非言語君</string>
+
+    <string name="menu_list_category">カテゴリー別！：</string>
+    <string name="menu_list_options_all">全部！</string>
+    <string name="menu_list_options_baai">場合の数</string>
+    <string name="menu_list_options_noudo">濃度</string>
+    <string name="menu_list_options_kakuritu">確率</string>
+    <string name="menu_list_options_soneki">損益</string>
+    <string name="menu_list_options_daikin">代金の清算</string>
+
+    <string name="ab_welcome">ようこそ！今日も１日頑張りましょう！</string>
+    <string name="bt_calendar">タップして日付を表示</string>
+    <string name="tv_played_check_true">やった</string>
+    <string name="tv_played_check_flase">やってない</string>
+    <string name="bt_Category">カテゴリー別に選択！</string>
+    <string name="bt_start">Start!</string>
+
+    <string name="_00_00">00:00</string>
+    <string name="ab_qcnt">問目！！</string>
+    <string name="bt_ans">答え</string>
+    <string name="bt_next">next!</string>
+
+    <string name="tv_ans_res">/10問正解！</string>
+    <string name="bt_home">Home</string>
+</resources>

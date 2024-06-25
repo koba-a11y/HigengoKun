@@ -1,0 +1,8 @@
+<resources>
+    <string name = "question_noudo_1">20gの食塩を水の入ったコップに溶かすと5%の食塩水ができた。コップには何gの水が入っていたか。</string>
+    <string name = "question_noudo_2">12%の食塩水400gと、16%の食塩水600gを混ぜると何%の食塩水ができるか。</string>
+    <string name = "question_noudo_3">15%の食塩水400gにある量の水を加えると食塩水の濃さが12%になった。加えた水の量は何gか。</string>
+    <string name = "question_noudo_4">3%の食塩水と10%の食塩水を混ぜて、5%の食塩水を350g作りたい。このとき、3%の食塩水は何g必要か。</string>
+    <string name = "question_noudo_5">15%の食塩水200gを24%にするためには、何gの水を蒸発させればよいか。</string>
+    <string name = "question_noudo_6">15%の食塩水200gと18%の食塩水200gと20%の食塩水100gを混ぜ合わせると、何%の食塩水ができるか。</string>
+</resources>
