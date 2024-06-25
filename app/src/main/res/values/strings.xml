@@ -8,6 +8,7 @@
     <string name="menu_list_options_kakuritu">確率</string>
     <string name="menu_list_options_soneki">損益</string>
     <string name="menu_list_options_daikin">代金の清算</string>
+    <string name="menu_list_options_waribiki">料金の割引</string>
 
     <string name="ab_welcome">ようこそ！今日も１日頑張りましょう！</string>
     <string name="bt_calendar">タップして日付を表示</string>

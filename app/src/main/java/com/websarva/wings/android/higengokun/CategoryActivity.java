@@ -134,6 +134,9 @@ public class CategoryActivity extends AppCompatActivity {
                 case DAIKIN:
                     actionBar.setTitle(getString(R.string.menu_list_category) + getString(R.string.menu_list_options_daikin));
                     break;
+                case WARIBIKI:
+                    actionBar.setTitle(getString(R.string.menu_list_category) + getString(R.string.menu_list_options_waribiki));
+                    break;
                 default:
                     break;
             }
@@ -157,6 +160,8 @@ public class CategoryActivity extends AppCompatActivity {
                 return Category.SONEKI;
             case R.id.menuListOptionDaikin:
                 return Category.DAIKIN;
+            case R.id.menuListoptionWaribiki:
+                return Category.WARIBIKI;
             default:
                 return null;
         }

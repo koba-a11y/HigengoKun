@@ -22,8 +22,13 @@
         app:showAsAction="never"
         android:title="@string/menu_list_options_soneki"/>
     <item
-        android:id="@+id/menuListOptionDaikin"
+    android:id="@+id/menuListOptionDaikin"
+    app:showAsAction="never"
+    android:title="@string/menu_list_options_daikin"/>
+
+    <item
+        android:id="@+id/menuListoptionWaribiki"
         app:showAsAction="never"
-        android:title="@string/menu_list_options_daikin"/>
+        android:title="@string/menu_list_options_waribiki"/>
 
 </menu>

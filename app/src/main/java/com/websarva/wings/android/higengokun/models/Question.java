@@ -10,12 +10,12 @@ import java.util.Arrays;
 import java.util.Collections;
 
 public class Question  {
-    public static final int NumberOfQuestions = 46;
+    public static final int NumberOfQuestions = 50;//配列の数+1
 
-    private Category q_category; //問題カテゴリ
-    private int q_RID;//問題のR値
-    private ArrayList<String> choices; //選択肢
-    private int ans_index;
+    private final Category q_category; //問題カテゴリ
+    private final int q_RID;//問題のR値
+    private final ArrayList<String> choices; //選択肢
+    private final int ans_index;
 
     private static final Question[] questions = new Question[NumberOfQuestions];
     public static ArrayList<Integer> rndlist = new ArrayList<>();
@@ -102,6 +102,11 @@ public class Question  {
         questions[43] = new Question(Category.DAIKIN,R.string.question_daikin_4_2,new String[]{"ウ：2000円、エ：5000円","ウ：2000円、エ：6000円","ウ：3000円、エ：5000円","ウ：3000円、エ：6000円","ウ：4000円、エ：5000円","ウ：4000円、エ：6000円","ウ：5000円、エ：5000円","ウ：5000円、エ：6000円"}, 4);
         questions[44] = new Question(Category.DAIKIN,R.string.question_daikin_5_1,new String[]{"2500円損をする","3500円損をする","4500円損をする","5500円損をする","2500円得をする","3500円得をする","4500円得をする","5500円得をする"}, 3);
         questions[45] = new Question(Category.DAIKIN,R.string.question_daikin_5_2,new String[]{"PがQに2000円支払い、RがPに1000円支払う","PがQに2000円支払い、RがPに2000円支払う","PがQに2000円支払い、RがPに3000円支払う","PがQに2000円支払い、RがPに4000円支払う","QがPに2000円支払い、RがPに1000円支払う","QがPに2000円支払い、RがPに2000円支払う","QがPに2000円支払い、RがPに3000円支払う","QがPに2000円支払い、RがPに4000円支払う"}, 6);
+        //割引
+        questions[46] = new Question(Category.WARIBIKI,R.string.question_waribiki_1,new String[]{"4900円", "5000円", "5100円", "5200円", "5300円", "5400円", "5500円", "5600円"}, 6);
+        questions[47] = new Question(Category.WARIBIKI,R.string.question_waribiki_2,new String[]{"350時間", "400時間", "450時間", "500時間", "550時間", "600時間", "650時間", "700時間"}, 3);
+        questions[48] = new Question(Category.WARIBIKI,R.string.question_waribiki_3,new String[]{"720円", "740円", "760円", "780円", "800円", "820円", "840円", "860円"}, 0);
+        questions[49] = new Question(Category.WARIBIKI,R.string.question_waribiki_4,new String[]{"29000円", "30000円", "31000円", "32000円", "33000円", "34000円", "35000円", "36000円"}, 1);
 
     }
 
@@ -126,6 +131,8 @@ public class Question  {
                 return "損益";
             case DAIKIN:
                 return "代金の清算";
+            case WARIBIKI:
+                return "料金の割引";
             default:
                 return "エラー";
         }

@@ -6,5 +6,6 @@ public enum Category {
     NOUDO,  // 濃度
     KAKURITU, // 確率
     SONEKI, // 損益
-    DAIKIN; // 代金の清算
+    DAIKIN, // 代金の清算
+    WARIBIKI//料金の割引
 }
