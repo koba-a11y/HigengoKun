@@ -84,7 +84,8 @@ public class OriginalRowAdapter extends BaseAdapter {
                 holder.ivCategoryIcon.setImageResource(R.drawable.ic_daikin); // ic_daikin はあなたの画像リソース
                 break;
             case "料金の割引:":
-                holder.ivCategoryIcon.setImageResource(R.drawable.ic_daikin); // ic_daikin はあなたの画像リソース
+                holder.ivCategoryIcon.setImageResource(R.drawable.ic_waribiki); // ic_daikin はあなたの画像リソース
+                break;
             default:
                 holder.ivCategoryIcon.setImageResource(R.drawable.maesentouk); // ic_default はデフォルトの画像リソース
                 break;
