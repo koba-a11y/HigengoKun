@@ -24,7 +24,6 @@ import java.util.Map;
 
 public class CategoryActivity extends AppCompatActivity {
 
-    Question question;
     ListView lvCategory;
 
 

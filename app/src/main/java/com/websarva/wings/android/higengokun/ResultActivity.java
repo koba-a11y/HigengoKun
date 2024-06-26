@@ -6,12 +6,14 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.websarva.wings.android.higengokun.enums.Category;
 import com.websarva.wings.android.higengokun.models.Response;
 import com.websarva.wings.android.higengokun.utils.FileUtil;
 import com.websarva.wings.android.higengokun.models.Question;
@@ -30,7 +32,6 @@ public class ResultActivity extends AppCompatActivity {
 
     TextView tvAnsResult;
     TextView tvTimeResult;
-    Button btHome;
     ListView lvQuestion;
 
 
@@ -52,12 +53,12 @@ public class ResultActivity extends AppCompatActivity {
         //アクションバー設定
         ActionBar actionBar = getSupportActionBar();
         if(actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(true);
             actionBar.setTitle("リザルト！！！！");
         }
 
         tvAnsResult = findViewById(R.id.tvAnsResult);
         tvTimeResult = findViewById(R.id.tvTimeResult);
-        btHome = findViewById(R.id.btHome);
         lvQuestion = findViewById(R.id.lvQuestion);
 
 
@@ -84,6 +85,24 @@ public class ResultActivity extends AppCompatActivity {
         OriginalRowAdapter adapter = new OriginalRowAdapter(this, _feedBackList);
         lvQuestion.setAdapter(adapter);
         lvQuestion.setOnItemClickListener(new ListItemClickListener());
+    }
+
+    //アクションバー戻るボタン
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        boolean returnVal = true;
+        int itemId = item.getItemId();
+        if(itemId == android.R.id.home) {
+            Intent intent = new Intent(this, MainActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(intent);
+            overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+            finish();
+            return true;
+        } else {
+            returnVal = super.onOptionsItemSelected(item);
+        }
+        return returnVal;
     }
 
     private class ListItemClickListener implements AdapterView.OnItemClickListener {
@@ -149,11 +168,6 @@ public class ResultActivity extends AppCompatActivity {
 
     }
 
-    public void onClickHome(View view) {
-        Intent intent = new Intent(ResultActivity.this, MainActivity.class);
-        startActivity(intent);
-        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
-    }
 
 
 
