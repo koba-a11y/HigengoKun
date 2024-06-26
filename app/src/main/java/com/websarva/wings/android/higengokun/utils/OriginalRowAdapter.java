@@ -87,7 +87,7 @@ public class OriginalRowAdapter extends BaseAdapter {
                 holder.ivCategoryIcon.setImageResource(R.drawable.ic_waribiki); // ic_waribiki はあなたの画像リソース
                 break;
             default:
-                holder.ivCategoryIcon.setImageResource(R.drawable.maesentouk); // ic_default はデフォルトの画像リソース
+                holder.ivCategoryIcon.setImageResource(R.drawable.ic_default); // ic_default はデフォルトの画像リソース
                 break;
         }
 
