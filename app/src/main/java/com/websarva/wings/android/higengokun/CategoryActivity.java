@@ -1,7 +1,11 @@
 package com.websarva.wings.android.higengokun;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.text.SpannableString;
+import android.text.style.ForegroundColorSpan;
+import android.view.ContextMenu;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -46,6 +50,8 @@ public class CategoryActivity extends AppCompatActivity {
             actionBar.setTitle(getString(R.string.menu_list_category) + getString(R.string.menu_list_options_all));
         }
 
+
+
         lvCategory = findViewById(R.id.lvCategory);
         //リストを生成する
         _categoryList = createCategoryList(Category.ALL);
@@ -53,6 +59,9 @@ public class CategoryActivity extends AppCompatActivity {
         OriginalRowAdapter adapter = new OriginalRowAdapter(this, _categoryList);
         lvCategory.setAdapter(adapter);
         lvCategory.setOnItemClickListener(new ListItemClickListener());
+
+        //コンテキスト設定
+        registerForContextMenu(lvCategory);
 
     }
 
@@ -143,8 +152,6 @@ public class CategoryActivity extends AppCompatActivity {
         }
     }
 
-
-
     private Category getCategoryFromMenuItem(int itemId) {
         switch (itemId) {
             case R.id.menuListOptionAll:
@@ -177,6 +184,60 @@ public class CategoryActivity extends AppCompatActivity {
             intent.putExtra("pos",position);
             startActivity(intent);
 
+        }
+    }
+
+    //trackContextの設定
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View view, ContextMenu.ContextMenuInfo menuInfo){
+        super.onCreateContextMenu(menu, view, menuInfo);
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.track_context_menu_list, menu);
+        menu.setHeaderTitle(R.string.track_context_title);
+
+        //タップを無効化する
+        MenuItem item1 = menu.findItem(R.id.trackContext1);
+        MenuItem item2 = menu.findItem(R.id.trackContext2);
+        MenuItem item3 = menu.findItem(R.id.trackContext3);
+
+        item1.setEnabled(false);
+        item2.setEnabled(false);
+        item3.setEnabled(false);
+
+
+        AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) menuInfo;
+        int position = info.position;
+
+
+        /*
+        AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) menuInfo;
+        int position = info.position;
+
+        // 長押しされたリスト項目の位置に応じてメニューの表示を変更する
+        Map<String, String> selectedItem = _categoryList.get(position);
+        String questionText = selectedItem.get("question");
+
+        menu.findItem(R.id.trackContext1).setTitle("Question: " + questionText);
+        menu.findItem(R.id.trackContext2).setTitle("Position: " + position);
+        menu.findItem(R.id.trackContext3).setTitle("Custom Option for Item " + position);*/
+
+        //見えなくする
+        /*item1.setVisible(false);
+        item2.setVisible(false);
+        item3.setVisible(false);*/
+
+
+        // スタイルを適用する
+        applyCustomStyleForMenuItems(menu);
+    }
+
+    //なんかスタイル適用するやつ
+    private void applyCustomStyleForMenuItems(ContextMenu menu) {
+        for (int i = 0; i < menu.size(); i++) {
+            MenuItem item = menu.getItem(i);
+            SpannableString spanString = new SpannableString(item.getTitle().toString());
+            spanString.setSpan(new ForegroundColorSpan(Color.BLACK), 0, spanString.length(), 0); // 黒色に設定
+            item.setTitle(spanString);
         }
     }
 }

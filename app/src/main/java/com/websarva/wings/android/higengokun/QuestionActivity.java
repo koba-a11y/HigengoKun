@@ -10,6 +10,7 @@ import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.AlphaAnimation;
@@ -27,8 +28,17 @@ import com.websarva.wings.android.higengokun.models.Response;
 
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Queue;
 import java.util.Timer;
 import java.util.TimerTask;
+
+/*TODO
+* WeekActivityから遷移したことがわかる処理
+*   intentにbefore等を追加してenumにアクティビティの値を設定する？
+*   posに関連する処理を直す
+* posの名前の変更
+*   一つ前の画面所法をbeforeでやるならposの名前を変える。(分かりにくすぎる)
+* */
 
 public class QuestionActivity extends AppCompatActivity {
 
@@ -113,6 +123,10 @@ public class QuestionActivity extends AppCompatActivity {
                 question = Question.getQuestion(Question.rndlist.get(arryindex));
             }
         }
+
+        //回答履歴読み込み
+        question.loadRecentAnswers(this);
+
         show();
 
         //タイマー処理
@@ -134,15 +148,16 @@ public class QuestionActivity extends AppCompatActivity {
                 response.r_ans[cnt-1] = true;
                 response.r_tcnt += 1;
 
-
             }else {
                 ivResult.setImageResource(R.drawable.animal_quiz_neko_batsu);
                 popResult();
                 response.r_ans[cnt-1] = false;
             }
             response.r_choice[cnt-1] = position;
-            if(pos == -1) {
+            if(pos == -1) {//MainActivityからの遷移
                 lvAnsGroup.setEnabled(false);
+                question.addAnswer(response.r_ans[cnt-1]);//回答履歴の保存
+                question.saveRecentAnswers(QuestionActivity.this);
             }
 
             btNext.setEnabled(true);
@@ -151,6 +166,7 @@ public class QuestionActivity extends AppCompatActivity {
 
     void show() {
         if(question != null) {
+            Log.d("QuestionActivity.", "show(): "+question.getRecentAnswers());
             response.r_ID[cnt-1] = question.rndlist.get(arryindex);
             response.r_category[cnt-1] = Question.geterCategory(question);
             lvAnsGroup.setEnabled(true);

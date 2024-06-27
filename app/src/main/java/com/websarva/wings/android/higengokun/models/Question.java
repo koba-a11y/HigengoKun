@@ -2,12 +2,20 @@ package com.websarva.wings.android.higengokun.models;
 
 
 
+import android.content.Context;
+import android.content.SharedPreferences;
+
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.websarva.wings.android.higengokun.R;
 import com.websarva.wings.android.higengokun.enums.Category;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.LinkedList;
+import java.util.Queue;
 
 public class Question  {
     public static final int NumberOfQuestions = 50;//配列の数+1
@@ -16,15 +24,18 @@ public class Question  {
     private final int q_RID;//問題のR値
     private final ArrayList<String> choices; //選択肢
     private final int ans_index;
+    private Queue<Boolean> recentAnswers;//各問題直近3回の回答履歴
 
     private static final Question[] questions = new Question[NumberOfQuestions];
     public static ArrayList<Integer> rndlist = new ArrayList<>();
+
 
     private Question(Category q_category, int q_RID, String[] choices, int ans_index) {
         this.q_category = q_category;
         this.q_RID = q_RID;
         this.choices = new ArrayList<>(Arrays.asList(choices));
         this.ans_index = ans_index;
+        this.recentAnswers = new LinkedList<>();//初期化
     }
 
     public static Category geterCategory(Question question) {
@@ -39,6 +50,7 @@ public class Question  {
     public static ArrayList<String> geterChoices(Question question) {
         return question.choices;
     }
+
 
     //乱数の準備
     public static void makernd() {
@@ -151,5 +163,44 @@ public class Question  {
         }
 
         return NumberOfQuestions - 1;
+    }
+
+    //直近３回の回答履歴を更新
+    public void addAnswer(boolean isCorrect) {
+        if(recentAnswers.size() >=3) {
+            recentAnswers.poll();
+        }
+        recentAnswers.add(isCorrect);
+    }
+
+    //過去３回の回答履歴を取得
+    public Queue<Boolean> getRecentAnswers() {
+        return new LinkedList<>(recentAnswers);
+    }
+
+    //苦手問題かどうかを判定
+    public boolean isWeekQuestion() {
+        return recentAnswers.contains(false);
+    }
+
+    //回答履歴を保存
+    public void saveRecentAnswers(Context context) {
+        SharedPreferences sharedPreferences = context.getSharedPreferences("AnswerTrackingPrefs", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        Gson gson = new Gson();
+        String json = gson.toJson(this.recentAnswers);
+        editor.putString("recentAnswers_" + this.q_RID, json);
+        editor.apply();
+    }
+
+    // 回答履歴を読み込み
+    public void loadRecentAnswers(Context context) {
+        SharedPreferences sharedPreferences = context.getSharedPreferences("AnswerTrackingPrefs", Context.MODE_PRIVATE);
+        Gson gson = new Gson();
+        String json = sharedPreferences.getString("recentAnswers_" + this.q_RID, "");
+        if (!json.isEmpty()) {
+            Type type = new TypeToken<Queue<Boolean>>() {}.getType();
+            this.recentAnswers = gson.fromJson(json, type);
+        }
     }
 }
