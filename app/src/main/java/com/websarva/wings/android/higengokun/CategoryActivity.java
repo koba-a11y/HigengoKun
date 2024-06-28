@@ -1,13 +1,22 @@
 package com.websarva.wings.android.higengokun;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.Typeface;
 import android.os.Bundle;
+import android.text.SpannableString;
+import android.text.style.AbsoluteSizeSpan;
+import android.text.style.ForegroundColorSpan;
+import android.util.Log;
+import android.view.ContextMenu;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.websarva.wings.android.higengokun.models.Question;
 
@@ -21,16 +30,20 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Queue;
 
 public class CategoryActivity extends AppCompatActivity {
 
     ListView lvCategory;
+    TextView tvCategoryTitle;
 
 
     private List<Map<String,String>> _categoryList;
 
 
     private Category actionMode = Category.ALL;
+    //項目のR値
+    int[] menuItems = {R.id.trackContext1, R.id.trackContext2, R.id.trackContext3};
 
 
     @Override
@@ -46,13 +59,23 @@ public class CategoryActivity extends AppCompatActivity {
             actionBar.setTitle(getString(R.string.menu_list_category) + getString(R.string.menu_list_options_all));
         }
 
+
+
         lvCategory = findViewById(R.id.lvCategory);
+        tvCategoryTitle = findViewById(R.id.tvCategoryTitle);
+
+        //フォントの変更
+        Typeface ronde = Typeface.createFromAsset(getAssets(), "Ronde-B_square.otf");
+        tvCategoryTitle.setTypeface(ronde);
         //リストを生成する
         _categoryList = createCategoryList(Category.ALL);
         //アダプタに自作レイアウトを設定する
         OriginalRowAdapter adapter = new OriginalRowAdapter(this, _categoryList);
         lvCategory.setAdapter(adapter);
         lvCategory.setOnItemClickListener(new ListItemClickListener());
+
+        //コンテキスト設定
+        registerForContextMenu(lvCategory);
 
     }
 
@@ -143,8 +166,7 @@ public class CategoryActivity extends AppCompatActivity {
         }
     }
 
-
-
+    @SuppressLint("NonConstantResourceId")
     private Category getCategoryFromMenuItem(int itemId) {
         switch (itemId) {
             case R.id.menuListOptionAll:
@@ -178,6 +200,72 @@ public class CategoryActivity extends AppCompatActivity {
             startActivity(intent);
 
         }
+    }
+
+    //trackContextの設定
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View view, ContextMenu.ContextMenuInfo menuInfo){
+        super.onCreateContextMenu(menu, view, menuInfo);
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.track_context_menu_list, menu);
+        menu.setHeaderTitle(R.string.track_context_title);
+
+
+        AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) menuInfo;
+        int position = info.position;
+        Queue<Boolean> recent = Question.getRecentAnswers(actionMode, position);
+
+
+        //Queueの要素数で項目を表示、非表示
+        int size = recent.size();
+        for(int i = 0; i < menuItems.length; i++) {
+            MenuItem item =menu.findItem(menuItems[i]);
+            if(i < size) {
+                item.setVisible(true);
+                if(recent.poll()){
+                    item.setTitle(R.string.track_context_true);
+                }else {
+                    item.setTitle(R.string.track_context_false);
+                }
+            }else {
+                item.setVisible(false);
+            }
+        }
+
+        // 長押しされたリスト項目の位置に応じてメニューの表示を変更する
+        /*Map<String, String> selectedItem = _categoryList.get(position);
+        String questionText = selectedItem.get("question");
+
+        menu.findItem(R.id.trackContext1).setTitle("Question: " + questionText);
+        menu.findItem(R.id.trackContext2).setTitle("Position: " + position);
+        menu.findItem(R.id.trackContext3).setTitle("Custom Option for Item " + position);*/
+
+
+        // カスタムスタイルを適用するアイテムを取得
+        MenuItem trackContextNew = menu.findItem(R.id.trackContextNew);
+        MenuItem trackContextOld = menu.findItem(R.id.trackContextOld);
+
+        // スタイルを適用する
+        applyCustomStyleForMenuItems(menu);
+        applyCustomStyleGray(trackContextNew);
+        applyCustomStyleGray(trackContextOld);
+
+    }
+
+    //なんかスタイル適用するやつ
+    private void applyCustomStyleForMenuItems(ContextMenu menu) {
+        for (int i = 0; i < menu.size(); i++) {
+            MenuItem item = menu.getItem(i);
+            SpannableString spanString = new SpannableString(item.getTitle().toString());
+            spanString.setSpan(new ForegroundColorSpan(Color.BLACK), 0, spanString.length(), 0); // 黒色に設定
+            item.setTitle(spanString);
+        }
+    }
+    private void applyCustomStyleGray(MenuItem item) {
+        SpannableString spanString = new SpannableString(item.getTitle().toString());
+        spanString.setSpan(new ForegroundColorSpan(Color.GRAY), 0, spanString.length(), 0); // テキストカラーを赤色に設定
+        spanString.setSpan(new AbsoluteSizeSpan(11, true), 0, spanString.length(), 0); // 文字サイズを設定
+        item.setTitle(spanString);
     }
 }
 
