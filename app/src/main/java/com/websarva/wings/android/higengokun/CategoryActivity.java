@@ -8,7 +8,6 @@ import android.os.Bundle;
 import android.text.SpannableString;
 import android.text.style.AbsoluteSizeSpan;
 import android.text.style.ForegroundColorSpan;
-import android.util.Log;
 import android.view.ContextMenu;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -18,12 +17,11 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.websarva.wings.android.higengokun.models.Question;
-
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.websarva.wings.android.higengokun.enums.Category;
+import com.websarva.wings.android.higengokun.models.Question;
 import com.websarva.wings.android.higengokun.utils.OriginalRowAdapter;
 
 import java.util.ArrayList;
@@ -231,15 +229,6 @@ public class CategoryActivity extends AppCompatActivity {
                 item.setVisible(false);
             }
         }
-
-        // 長押しされたリスト項目の位置に応じてメニューの表示を変更する
-        /*Map<String, String> selectedItem = _categoryList.get(position);
-        String questionText = selectedItem.get("question");
-
-        menu.findItem(R.id.trackContext1).setTitle("Question: " + questionText);
-        menu.findItem(R.id.trackContext2).setTitle("Position: " + position);
-        menu.findItem(R.id.trackContext3).setTitle("Custom Option for Item " + position);*/
-
 
         // カスタムスタイルを適用するアイテムを取得
         MenuItem trackContextNew = menu.findItem(R.id.trackContextNew);

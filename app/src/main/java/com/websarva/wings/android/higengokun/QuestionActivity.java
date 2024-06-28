@@ -27,7 +27,6 @@ import com.websarva.wings.android.higengokun.models.Response;
 
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Queue;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -117,6 +116,7 @@ public class QuestionActivity extends AppCompatActivity {
             if(-1 != pos) {
                 btNext.setVisibility(View.INVISIBLE);
                 question = Question.getQuestion(pos);
+                assert question != null;
                 actionBar.setTitle("カテゴリー:"+Question.getCategory(Question.geterCategory(question)));
             }else {
                 question = Question.getQuestion(Question.rndlist.get(arryindex));
@@ -166,7 +166,7 @@ public class QuestionActivity extends AppCompatActivity {
 
     void show() {
         if(question != null) {
-            response.r_ID[cnt-1] = question.rndlist.get(arryindex);
+            response.r_ID[cnt-1] = Question.rndlist.get(arryindex);
             response.r_category[cnt-1] = Question.geterCategory(question);
             lvAnsGroup.setEnabled(true);
             tvQuestion.setText(getString(Question.geterRid(question)));
