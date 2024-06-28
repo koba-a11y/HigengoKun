@@ -73,7 +73,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/btCategory"
         app:layout_constraintVertical_bias="1.0"
-        app:srcCompat="@drawable/img_noukin" />
+        app:srcCompat="@drawable/ic_noukin" />
 
     <Button
         android:id="@+id/btCategory"
