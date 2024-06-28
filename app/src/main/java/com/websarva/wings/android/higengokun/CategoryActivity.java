@@ -218,7 +218,6 @@ public class CategoryActivity extends AppCompatActivity {
 
         //Queueの要素数で項目を表示、非表示
         int size = recent.size();
-        Log.d("CategoryActivity.", "onCreateContextMenu: "+size);
         for(int i = 0; i < menuItems.length; i++) {
             MenuItem item =menu.findItem(menuItems[i]);
             if(i < size) {

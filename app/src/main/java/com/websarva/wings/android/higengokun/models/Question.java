@@ -4,7 +4,6 @@ package com.websarva.wings.android.higengokun.models;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.util.Log;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -217,7 +216,6 @@ public class Question  {
         String json = sharedPreferences.getString("recentAnswers_" + this.q_RID, "");
         if (!json.isEmpty()) {
             Type type = new TypeToken<Queue<Boolean>>() {}.getType();
-            Log.d("Question.java.", "loadRecentAnswers: "+gson.fromJson(json,type));
             this.recentAnswers = gson.fromJson(json, type);
         }
     }

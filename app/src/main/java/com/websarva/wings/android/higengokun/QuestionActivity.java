@@ -10,7 +10,6 @@ import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.AlphaAnimation;
@@ -167,7 +166,6 @@ public class QuestionActivity extends AppCompatActivity {
 
     void show() {
         if(question != null) {
-            Log.d("QuestionActivity.", "show(): "+question.getRecentAnswers());
             response.r_ID[cnt-1] = question.rndlist.get(arryindex);
             response.r_category[cnt-1] = Question.geterCategory(question);
             lvAnsGroup.setEnabled(true);
