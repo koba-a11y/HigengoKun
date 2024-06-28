@@ -125,7 +125,7 @@ public class QuestionActivity extends AppCompatActivity {
         }
 
         //回答履歴読み込み
-        question.loadRecentAnswers(this);
+        //question.loadRecentAnswers(this);
 
         show();
 
@@ -159,6 +159,7 @@ public class QuestionActivity extends AppCompatActivity {
                 question.addAnswer(response.r_ans[cnt-1]);//回答履歴の保存
                 question.saveRecentAnswers(QuestionActivity.this);
             }
+            question.saveRecentAnswers(QuestionActivity.this);
 
             btNext.setEnabled(true);
         }

@@ -1,14 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
+        android:id="@+id/trackContextNew"
+        android:title="@string/track_context_new"
+        android:enabled="false"
+
+        />
+    <item
         android:id="@+id/trackContext1"
         android:title="@string/track_context_true"
+        android:visible="false"
+        android:enabled="false"
+
     />
     <item
         android:id="@+id/trackContext2"
         android:title="@string/track_context_true"
+        android:visible="false"
+        android:enabled="false"
         />
     <item
         android:id="@+id/trackContext3"
-        android:title="@string/track_context_true" />
+        android:title="@string/track_context_true"
+        android:visible="false"
+        android:enabled="false"/>
+    <item
+        android:id="@+id/trackContextOld"
+        android:title="@string/track_context_old"
+        android:enabled="false"
+        />
 </menu>

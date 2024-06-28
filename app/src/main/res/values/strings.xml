@@ -25,7 +25,11 @@
     <string name="tv_ans_res">/10問正解！</string>
     <string name="bt_home">Home</string>
 
+    <string name="tv_list_desc">長押しで過去の回答を表示！</string>
+
     <string name="track_context_title">直近３問の回答状況</string>
     <string name="track_context_true">正解</string>
     <string name="track_context_false">不正解</string>
+    <string name="track_context_new">新</string>
+    <string name="track_context_old">古</string>
 </resources>

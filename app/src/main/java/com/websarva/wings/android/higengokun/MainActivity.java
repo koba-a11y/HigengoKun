@@ -47,6 +47,13 @@ public class MainActivity extends AppCompatActivity {
 
         //問題初期化
         Question.init();
+        // すべてのquestionsの回答履歴を読み込む
+        for (int i = 0; i < Question.NumberOfQuestions; i++) {
+            Question question = Question.getQuestion(i);
+            if (question != null) {
+                question.loadRecentAnswers(this);
+            }
+        }
 
 
     }

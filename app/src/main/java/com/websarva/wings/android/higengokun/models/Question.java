@@ -4,6 +4,7 @@ package com.websarva.wings.android.higengokun.models;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.util.Log;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -150,9 +151,9 @@ public class Question  {
         }
     }
 
-    public static int getQuestionFromCategory(Category cat, int pos) {
-        int questionsIndex = 0;
 
+    private static int questionSearch(Category cat, int pos){
+        int questionsIndex = 0;
         for (int i = 0; i < NumberOfQuestions; i++) {
             if (cat == questions[i].q_category) {
                 if (questionsIndex == pos) {
@@ -161,9 +162,28 @@ public class Question  {
                 questionsIndex++;
             }
         }
-
         return NumberOfQuestions - 1;
     }
+
+    public static int getQuestionFromCategory(Category cat, int pos) {
+        return questionSearch(cat,pos);
+    }
+
+    public static Queue<Boolean> getRecentAnswers(Category cat, int pos){
+        if(cat != Category.ALL){
+            pos = questionSearch(cat,pos);
+        }
+
+        return new LinkedList<>(questions[pos].recentAnswers);
+    }
+
+    //過去３回の回答履歴を取得
+    public Queue<Boolean> getRecentAnswers() {
+        return new LinkedList<>(recentAnswers);
+    }
+
+
+
 
     //直近３回の回答履歴を更新
     public void addAnswer(boolean isCorrect) {
@@ -173,10 +193,7 @@ public class Question  {
         recentAnswers.add(isCorrect);
     }
 
-    //過去３回の回答履歴を取得
-    public Queue<Boolean> getRecentAnswers() {
-        return new LinkedList<>(recentAnswers);
-    }
+
 
     //苦手問題かどうかを判定
     public boolean isWeekQuestion() {
@@ -200,6 +217,7 @@ public class Question  {
         String json = sharedPreferences.getString("recentAnswers_" + this.q_RID, "");
         if (!json.isEmpty()) {
             Type type = new TypeToken<Queue<Boolean>>() {}.getType();
+            Log.d("Question.java.", "loadRecentAnswers: "+gson.fromJson(json,type));
             this.recentAnswers = gson.fromJson(json, type);
         }
     }
