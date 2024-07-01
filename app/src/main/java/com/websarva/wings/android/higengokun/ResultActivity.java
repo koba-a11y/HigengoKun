@@ -51,7 +51,7 @@ public class ResultActivity extends AppCompatActivity {
     String today;
 
     int pos;
-    int[] menuItems = {R.id.trackContext1, R.id.trackContext2, R.id.trackContext3};
+    int[] menuItems = {R.id.trackContext3, R.id.trackContext2, R.id.trackContext1};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

@@ -49,7 +49,7 @@ public class CategoryActivity extends AppCompatActivity implements NavigationVie
     private NavigationManager navigationManager;
     private Category actionMode = Category.ALL;
     //項目のR値
-    int[] menuItems = {R.id.trackContext1, R.id.trackContext2, R.id.trackContext3};
+    int[] menuItems = {R.id.trackContext3, R.id.trackContext2, R.id.trackContext1};
 
 
     @Override
