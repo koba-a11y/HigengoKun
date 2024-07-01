@@ -1,91 +1,108 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.drawerlayout.widget.DrawerLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/drawer_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-    <TextView
-        android:id="@+id/tvMainTitle"
+    <!-- メインコンテンツ -->
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/tvMainTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="62dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="68dp"
+            android:layout_marginEnd="8dp"
+            android:gravity="center"
+            android:text="@string/app_name"
+            android:textSize="48sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.497"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <Button
+            android:id="@+id/btCalendar"
+            style="@style/Widget.AppCompat.Button"
+            android:layout_width="wrap_content"
+            android:layout_height="70dp"
+            android:layout_marginTop="40dp"
+            android:layout_marginEnd="24dp"
+            android:onClick="onClickCalendar"
+            android:text="@string/bt_calendar"
+            app:layout_constraintEnd_toStartOf="@+id/tvPlayedCheck"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintHorizontal_chainStyle="packed"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvMainTitle" />
+
+        <TextView
+            android:id="@+id/tvPlayedCheck"
+            android:layout_width="wrap_content"
+            android:layout_height="70dp"
+            android:layout_marginTop="40dp"
+            android:gravity="center"
+            android:text="@string/tv_played_check_flase"
+            android:textSize="34sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/btCalendar"
+            app:layout_constraintTop_toBottomOf="@+id/tvMainTitle" />
+
+        <Button
+            android:id="@+id/btStart"
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            android:layout_marginTop="44dp"
+            android:background="@drawable/circle_des"
+            android:onClick="onClickStart"
+            android:text="@string/bt_start"
+            android:textSize="34sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.498"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/btCalendar" />
+
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="232dp"
+            android:layout_height="147dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.497"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/btCategory"
+            app:layout_constraintVertical_bias="1.0"
+            app:srcCompat="@drawable/ic_noukin" />
+
+        <Button
+            android:id="@+id/btCategory"
+            android:layout_width="168dp"
+            android:layout_height="76dp"
+            android:layout_marginTop="44dp"
+            android:background="@drawable/circle_des"
+            android:onClick="onClickCategory"
+            android:text="@string/bt_Category"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.497"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/btStart" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <!-- ナビゲーションドロワー -->
+    <com.google.android.material.navigation.NavigationView
+        android:id="@+id/nav_view"
         android:layout_width="wrap_content"
-        android:layout_height="62dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="68dp"
-        android:layout_marginEnd="8dp"
-        android:gravity="center"
-        android:text="@string/app_name"
-        android:textSize="48sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.497"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:layout_height="match_parent"
+        android:layout_gravity="start"
+        app:menu="@menu/side_menu" />
 
-    <Button
-        android:id="@+id/btCalendar"
-        style="@style/Widget.AppCompat.Button"
-        android:layout_width="wrap_content"
-        android:layout_height="70dp"
-        android:layout_marginTop="40dp"
-        android:layout_marginEnd="24dp"
-        android:onClick="onClickCalendar"
-        android:text="@string/bt_calendar"
-        app:layout_constraintEnd_toStartOf="@+id/tvPlayedCheck"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintHorizontal_chainStyle="packed"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvMainTitle" />
-
-    <TextView
-        android:id="@+id/tvPlayedCheck"
-        android:layout_width="wrap_content"
-        android:layout_height="70dp"
-        android:layout_marginTop="40dp"
-        android:gravity="center"
-        android:text="@string/tv_played_check_flase"
-        android:textSize="34sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/btCalendar"
-        app:layout_constraintTop_toBottomOf="@+id/tvMainTitle" />
-
-    <Button
-        android:id="@+id/btStart"
-        android:layout_width="120dp"
-        android:layout_height="120dp"
-        android:layout_marginTop="44dp"
-        android:background="@drawable/circle_des"
-        android:onClick="onClickStart"
-        android:text="@string/bt_start"
-        android:textSize="34sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btCalendar" />
-
-    <ImageView
-        android:id="@+id/imageView"
-        android:layout_width="232dp"
-        android:layout_height="147dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.497"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btCategory"
-        app:layout_constraintVertical_bias="1.0"
-        app:srcCompat="@drawable/ic_noukin" />
-
-    <Button
-        android:id="@+id/btCategory"
-        android:layout_width="168dp"
-        android:layout_height="76dp"
-        android:layout_marginTop="44dp"
-        android:background="@drawable/circle_des"
-        android:onClick="onClickCategory"
-        android:text="@string/bt_Category"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.497"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btStart" />
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.drawerlayout.widget.DrawerLayout>
