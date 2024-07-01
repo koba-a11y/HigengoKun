@@ -16,7 +16,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.android.material.navigation.NavigationView;
 import com.websarva.wings.android.higengokun.models.Question;
@@ -137,12 +136,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         int id = item.getItemId();
 
         if (id == R.id.nav_desc) {
-            Toast.makeText(this, "Home clicked", Toast.LENGTH_SHORT).show();
+            navigationManager.navigateToActivity(this,DescriptionActivity.class);
         } else if (id == R.id.nav_category) {
             navigationManager.navigateToActivity(this,CategoryActivity.class);
-            //navigateToActivity(CategoryActivity.class);
         } else if (id == R.id.nav_weakness) {
-            Toast.makeText(this, "Slideshow clicked", Toast.LENGTH_SHORT).show();
+            navigationManager.navigateToActivity(this, WeaknessActivity.class);
         }
         drawerLayout.closeDrawer(GravityCompat.START);
         return true;

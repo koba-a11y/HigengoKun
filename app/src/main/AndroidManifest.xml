@@ -13,6 +13,12 @@
         android:theme="@style/Theme.HigengoKun"
         tools:targetApi="31">
         <activity
+            android:name=".DescriptionActivity"
+            android:exported="false" />
+        <activity
+            android:name=".WeaknessActivity"
+            android:exported="false" />
+        <activity
             android:name=".CategoryActivity"
             android:exported="false"
             android:screenOrientation="portrait" />

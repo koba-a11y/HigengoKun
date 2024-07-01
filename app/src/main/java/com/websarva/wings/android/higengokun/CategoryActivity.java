@@ -147,9 +147,11 @@ public class CategoryActivity extends AppCompatActivity implements NavigationVie
         int id = item.getItemId();
 
         if (id == R.id.nav_desc) {
+            navigationManager.navigateToActivity(this, DescriptionActivity.class);
         } else if (id == R.id.nav_home) {
             navigationManager.navigateToActivity(this, MainActivity.class);
         } else if (id == R.id.nav_weakness) {
+            navigationManager.navigateToActivity(this, WeaknessActivity.class);
         }
         drawerLayout.closeDrawer(GravityCompat.START);
         return true;
