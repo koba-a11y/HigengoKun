@@ -177,8 +177,8 @@ public class Question  {
     }
 
     //過去３回の回答履歴を取得
-    public Queue<Boolean> getRecentAnswers() {
-        return new LinkedList<>(recentAnswers);
+    public static Queue<Boolean> getRecentAnswers(int number) {
+        return new LinkedList<>(questions[number].recentAnswers);
     }
 
 

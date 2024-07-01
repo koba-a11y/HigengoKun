@@ -123,8 +123,6 @@ public class QuestionActivity extends AppCompatActivity {
             }
         }
 
-        //回答履歴読み込み
-        //question.loadRecentAnswers(this);
 
         show();
 

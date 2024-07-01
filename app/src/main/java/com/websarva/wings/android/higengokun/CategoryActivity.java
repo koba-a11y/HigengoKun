@@ -58,10 +58,6 @@ public class CategoryActivity extends AppCompatActivity implements NavigationVie
         setContentView(R.layout.activity_category);
 
 
-
-
-
-
         lvCategory = findViewById(R.id.lvCategory);
         tvCategoryTitle = findViewById(R.id.tvCategoryTitle);
         drawerLayout = findViewById(R.id.drawer_layout);

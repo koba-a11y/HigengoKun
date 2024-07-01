@@ -4,8 +4,14 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.text.SpannableString;
+import android.text.style.AbsoluteSizeSpan;
+import android.text.style.ForegroundColorSpan;
+import android.view.ContextMenu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -25,6 +31,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Queue;
 
 public class ResultActivity extends AppCompatActivity {
 
@@ -44,6 +51,7 @@ public class ResultActivity extends AppCompatActivity {
     String today;
 
     int pos;
+    int[] menuItems = {R.id.trackContext1, R.id.trackContext2, R.id.trackContext3};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,6 +93,9 @@ public class ResultActivity extends AppCompatActivity {
         OriginalRowAdapter adapter = new OriginalRowAdapter(this, _feedBackList);
         lvQuestion.setAdapter(adapter);
         lvQuestion.setOnItemClickListener(new ListItemClickListener());
+
+        //コンテキスト設定
+        registerForContextMenu(lvQuestion);
     }
 
     //アクションバー戻るボタン
@@ -166,6 +177,63 @@ public class ResultActivity extends AppCompatActivity {
             ex.printStackTrace();
         }
 
+    }
+
+    //trackContextの設定
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View view, ContextMenu.ContextMenuInfo menuInfo){
+        super.onCreateContextMenu(menu, view, menuInfo);
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.track_context_menu_list, menu);
+        menu.setHeaderTitle(R.string.track_context_title);
+
+
+        AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) menuInfo;
+        int position = info.position;
+        Queue<Boolean> recent = Question.getRecentAnswers(response.r_ID[position]);
+
+
+        //Queueの要素数で項目を表示、非表示
+        int size = recent.size();
+        for(int i = 0; i < menuItems.length; i++) {
+            MenuItem item =menu.findItem(menuItems[i]);
+            if(i < size) {
+                item.setVisible(true);
+                if(recent.poll()){
+                    item.setTitle(R.string.track_context_true);
+                }else {
+                    item.setTitle(R.string.track_context_false);
+                }
+            }else {
+                item.setVisible(false);
+            }
+        }
+
+        // カスタムスタイルを適用するアイテムを取得
+        MenuItem trackContextNew = menu.findItem(R.id.trackContextNew);
+        MenuItem trackContextOld = menu.findItem(R.id.trackContextOld);
+
+        // スタイルを適用する
+        applyCustomStyleForMenuItems(menu);
+        applyCustomStyleGray(trackContextNew);
+        applyCustomStyleGray(trackContextOld);
+
+    }
+
+    //なんかスタイル適用するやつ
+    private void applyCustomStyleForMenuItems(ContextMenu menu) {
+        for (int i = 0; i < menu.size(); i++) {
+            MenuItem item = menu.getItem(i);
+            SpannableString spanString = new SpannableString(item.getTitle().toString());
+            spanString.setSpan(new ForegroundColorSpan(Color.BLACK), 0, spanString.length(), 0); // 黒色に設定
+            item.setTitle(spanString);
+        }
+    }
+    private void applyCustomStyleGray(MenuItem item) {
+        SpannableString spanString = new SpannableString(item.getTitle().toString());
+        spanString.setSpan(new ForegroundColorSpan(Color.GRAY), 0, spanString.length(), 0); // テキストカラーを赤色に設定
+        spanString.setSpan(new AbsoluteSizeSpan(11, true), 0, spanString.length(), 0); // 文字サイズを設定
+        item.setTitle(spanString);
     }
 
 
