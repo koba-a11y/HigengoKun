@@ -2,6 +2,7 @@
     <string name="app_name">非言語君</string>
 
     <string name="menu_list_category">カテゴリー別！：</string>
+    <string name="menu_weakness">苦手問題！</string>
     <string name="menu_list_options_all">全部！</string>
     <string name="menu_list_options_baai">場合の数</string>
     <string name="menu_list_options_noudo">濃度</string>
@@ -10,7 +11,14 @@
     <string name="menu_list_options_daikin">代金の清算</string>
     <string name="menu_list_options_waribiki">料金の割引</string>
 
+    <string name="navigation_drawer_open">開く</string>
+    <string name="navigation_drawer_close">閉じる</string>
+
+
     <string name="ab_welcome">ようこそ！今日も１日頑張りましょう！</string>
+    <string name="ab_desc">アプリについて</string>
+
+
     <string name="bt_calendar">タップして日付を表示</string>
     <string name="tv_played_check_true">やった</string>
     <string name="tv_played_check_flase">やってない</string>

@@ -18,10 +18,15 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
 
+import com.google.android.material.navigation.NavigationView;
 import com.websarva.wings.android.higengokun.enums.Category;
 import com.websarva.wings.android.higengokun.models.Question;
+import com.websarva.wings.android.higengokun.utils.NavigationManager;
 import com.websarva.wings.android.higengokun.utils.OriginalRowAdapter;
 
 import java.util.ArrayList;
@@ -30,7 +35,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Queue;
 
-public class CategoryActivity extends AppCompatActivity {
+public class CategoryActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
 
     ListView lvCategory;
     TextView tvCategoryTitle;
@@ -39,6 +44,9 @@ public class CategoryActivity extends AppCompatActivity {
     private List<Map<String,String>> _categoryList;
 
 
+    private DrawerLayout drawerLayout;
+    private ActionBarDrawerToggle toggle;
+    private NavigationManager navigationManager;
     private Category actionMode = Category.ALL;
     //項目のR値
     int[] menuItems = {R.id.trackContext1, R.id.trackContext2, R.id.trackContext3};
@@ -50,17 +58,34 @@ public class CategoryActivity extends AppCompatActivity {
         setContentView(R.layout.activity_category);
 
 
-        //アクションバーの文字変更
-        ActionBar actionBar = getSupportActionBar();
-        if (actionBar != null) {
-            actionBar.setDisplayHomeAsUpEnabled(true);
-            actionBar.setTitle(getString(R.string.menu_list_category) + getString(R.string.menu_list_options_all));
-        }
+
 
 
 
         lvCategory = findViewById(R.id.lvCategory);
         tvCategoryTitle = findViewById(R.id.tvCategoryTitle);
+        drawerLayout = findViewById(R.id.drawer_layout);
+
+        navigationManager = NavigationManager.getInstance();
+        navigationManager.setDrawerLayout(findViewById(R.id.drawer_layout));
+
+        // ナビゲーション(side)の設定
+        NavigationView navigationView = findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(this);
+
+        // DrawerLayoutのトグル設定
+        toggle = new ActionBarDrawerToggle(this, drawerLayout, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawerLayout.addDrawerListener(toggle);
+        toggle.syncState();
+
+        //アクションバーの文字変更
+        // アクションバーにナビゲーションアイコンを表示
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(true);
+            actionBar.setHomeButtonEnabled(true);
+            actionBar.setTitle(getString(R.string.menu_list_category) + getString(R.string.menu_list_options_all));
+        }
 
         //フォントの変更
         Typeface ronde = Typeface.createFromAsset(getAssets(), "Ronde-B_square.otf");
@@ -89,8 +114,12 @@ public class CategoryActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
+            if (toggle.onOptionsItemSelected(item)) {
+                return true;
+            }
+
             switch (item.getItemId()) {
-                case android.R.id.home:
+                case R.id.action_home:
                     Intent intent = new Intent(this, MainActivity.class);
                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                     startActivity(intent);
@@ -111,6 +140,21 @@ public class CategoryActivity extends AppCompatActivity {
             }
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public boolean onNavigationItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        if (id == R.id.nav_desc) {
+            navigationManager.navigateToActivity(this, DescriptionActivity.class);
+        } else if (id == R.id.nav_home) {
+            navigationManager.navigateToActivity(this, MainActivity.class);
+        } else if (id == R.id.nav_weakness) {
+            navigationManager.navigateToActivity(this, WeaknessActivity.class);
+        }
+        drawerLayout.closeDrawer(GravityCompat.START);
+        return true;
     }
 
     private List<Map<String, String>> createCategoryList(Category category) {
@@ -256,5 +300,6 @@ public class CategoryActivity extends AppCompatActivity {
         spanString.setSpan(new AbsoluteSizeSpan(11, true), 0, spanString.length(), 0); // 文字サイズを設定
         item.setTitle(spanString);
     }
+
 }
 
