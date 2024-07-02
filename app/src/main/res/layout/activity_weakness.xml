@@ -13,6 +13,19 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+        <Button
+            android:id="@+id/btWeaknessStart"
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            android:background="@drawable/circle_des"
+            android:onClick="onClickWeaknessStart"
+            android:text="@string/bt_start"
+            android:textSize="34sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <!-- ナビゲーションドロワー -->

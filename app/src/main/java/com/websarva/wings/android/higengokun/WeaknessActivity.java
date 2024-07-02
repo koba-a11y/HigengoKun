@@ -6,12 +6,15 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
 
 import com.google.android.material.navigation.NavigationView;
+import com.websarva.wings.android.higengokun.enums.ScreenType;
 import com.websarva.wings.android.higengokun.utils.NavigationManager;
 
 public class WeaknessActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
@@ -48,6 +51,14 @@ public class WeaknessActivity extends AppCompatActivity implements NavigationVie
             actionBar.setHomeButtonEnabled(true);
 
         }
+    }
+
+    public void onClickWeaknessStart(View view) {
+        Intent intent = new Intent(WeaknessActivity.this, QuestionActivity.class);
+        intent.putExtra("Type", ScreenType.WeaknessActivity.getId());
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
+        overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
     }
 
     @Override

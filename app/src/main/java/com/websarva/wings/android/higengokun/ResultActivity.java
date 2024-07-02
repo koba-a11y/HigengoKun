@@ -14,6 +14,7 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.websarva.wings.android.higengokun.enums.ScreenType;
 import com.websarva.wings.android.higengokun.models.Response;
 import com.websarva.wings.android.higengokun.utils.FileUtil;
 import com.websarva.wings.android.higengokun.models.Question;
@@ -45,7 +46,6 @@ public class ResultActivity extends AppCompatActivity {
     String today;
 
     int pos;
-    int[] menuItems = {R.id.trackContext3, R.id.trackContext2, R.id.trackContext1};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -115,7 +115,8 @@ public class ResultActivity extends AppCompatActivity {
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
             Intent intent = new Intent(ResultActivity.this, QuestionActivity.class);
             pos = response.r_ID[position];
-            intent.putExtra("pos",pos);
+            intent.putExtra("Number",pos);
+            intent.putExtra("Type", ScreenType.ResultActivity.getId());
             startActivity(intent);
         }
     }
@@ -124,6 +125,9 @@ public class ResultActivity extends AppCompatActivity {
         List<Map<String, String>> feedBackList = new ArrayList<>();
         Map<String, String> item = new HashMap<>();
         for(int i = 0; i < 10; i++) {
+            if(res.r_ID[i] == Integer.MIN_VALUE){
+                break;
+            }
             question = Question.getQuestion(res.r_ID[i]);
             item = new HashMap<>();
             item.put("category", Question.getCategory(res.r_category[i]) + ":");

@@ -22,11 +22,13 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.websarva.wings.android.higengokun.enums.Category;
+import com.websarva.wings.android.higengokun.enums.ScreenType;
 import com.websarva.wings.android.higengokun.models.Question;
 import com.websarva.wings.android.higengokun.models.Response;
 
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Arrays;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -50,7 +52,8 @@ public class QuestionActivity extends AppCompatActivity {
     ImageView ivResult;
     Handler handler;
 
-    private int pos ;
+    private int Type ;
+    private int Number;
 
     private Response response;
     private Question question;
@@ -105,23 +108,30 @@ public class QuestionActivity extends AppCompatActivity {
         tvCount.setTypeface(nikkyou);
         //レスポンスオブジェクト作成
         response = new Response(new int[10], new Category[10], new int[10], new boolean[10], "", 0);
-        //乱数初期化
-        Question.makernd();
+        Arrays.fill(response.r_ID, Integer.MIN_VALUE);//r_IDをInteger.MIN_VALUEで初期化
 
 
+
+        //問題の初期化
+        Question.makeQuestions();
         //問題処理
         Intent intent = getIntent();
         if(intent != null) {
-            pos = (int) intent.getSerializableExtra("pos");
-            if(-1 != pos) {
+            Type =intent.getIntExtra("Type",-1);
+            if(Type == ScreenType.MainActivity.getId()){//FromMainActivity
+                question = Question.getQuestion(Question._questionsList.get(arryindex));
+            } else if(Type == ScreenType.CategoryActivity.getId() || Type == ScreenType.ResultActivity.getId()){//FromCategoryOrResultActivity
+                Number = intent.getIntExtra("Number",-1);
                 btNext.setVisibility(View.INVISIBLE);
-                question = Question.getQuestion(pos);
+                question = Question.getQuestion(Number);
                 assert question != null;
                 actionBar.setTitle("カテゴリー:"+Question.getCategory(Question.geterCategory(question)));
-            }else {
-                question = Question.getQuestion(Question.rndlist.get(arryindex));
+            }else if(Type == ScreenType.WeaknessActivity.getId()){//FromWeaknessActivity
+                Question.makeWeaknessList();
+                question = Question.getQuestion(Question._questionsList.get(arryindex));
             }
         }
+
 
 
         show();
@@ -151,7 +161,7 @@ public class QuestionActivity extends AppCompatActivity {
                 response.r_ans[cnt-1] = false;
             }
             response.r_choice[cnt-1] = position;
-            if(pos == -1) {//MainActivityからの遷移
+            if(Type == ScreenType.MainActivity.getId() || Type == ScreenType.WeaknessActivity.getId()) {//From MainActivity or ResultActivity
                 lvAnsGroup.setEnabled(false);
                 question.addAnswer(response.r_ans[cnt-1]);//回答履歴の保存
                 question.saveRecentAnswers(QuestionActivity.this);
@@ -162,9 +172,42 @@ public class QuestionActivity extends AppCompatActivity {
         }
     }
 
+
+
+    public void onClickNext(View view) {
+        cnt++;
+        if(cnt > 10 || cnt > Question._questionsList.size()) {//10問終了
+            response.r_time = (String) tvCount.getText();
+            Intent intent = new Intent(QuestionActivity.this, ResultActivity.class);
+            intent.putExtra("Res", response);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(intent);
+            overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
+            finish();
+        }else {
+            actionBar.setTitle(Integer.valueOf(cnt).toString() + getString(R.string.ab_qcnt));
+            question = Question.getQuestion(Question._questionsList.get(arryindex));
+            show();
+            btNext.setEnabled(false);
+        }
+    }
+
+    //アクションバー戻るボタン
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        boolean returnVal = true;
+        int itemId = item.getItemId();
+        if(itemId == android.R.id.home) {
+            finish();
+        } else {
+            returnVal = super.onOptionsItemSelected(item);
+        }
+        return returnVal;
+    }
+
     void show() {
         if(question != null) {
-            response.r_ID[cnt-1] = Question.rndlist.get(arryindex);
+            response.r_ID[cnt-1] = Question._questionsList.get(arryindex);
             response.r_category[cnt-1] = Question.geterCategory(question);
             lvAnsGroup.setEnabled(true);
             tvQuestion.setText(getString(Question.geterRid(question)));
@@ -173,7 +216,6 @@ public class QuestionActivity extends AppCompatActivity {
             arryindex++;
         }
     }
-
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     void setTimer () {
@@ -203,38 +245,6 @@ public class QuestionActivity extends AppCompatActivity {
         }, 0, period);
     }
 
-    public void onClickNext(View view) {
-        cnt++;
-        if(cnt > 10) {//10問終了
-            response.r_time = (String) tvCount.getText();
-            Intent intent = new Intent(QuestionActivity.this, ResultActivity.class);
-            intent.putExtra("Res", response);
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-            startActivity(intent);
-            overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
-            finish();
-        }else {
-            actionBar.setTitle(Integer.valueOf(cnt).toString() + getString(R.string.ab_qcnt));
-            question = Question.getQuestion(Question.rndlist.get(arryindex));
-            show();
-            btNext.setEnabled(false);
-        }
-    }
-
-
-    //アクションバー戻るボタン
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        boolean returnVal = true;
-        int itemId = item.getItemId();
-        if(itemId == android.R.id.home) {
-            finish();
-        } else {
-            returnVal = super.onOptionsItemSelected(item);
-        }
-        return returnVal;
-    }
-
     private void popResult(){
         // フェードインアニメーション
         AlphaAnimation fadeIn = new AlphaAnimation(0, 1);
@@ -258,7 +268,7 @@ public class QuestionActivity extends AppCompatActivity {
                     @Override
                     public void onAnimationEnd(Animation animation) {
                         ivResult.setVisibility(View.GONE);
-                        if(pos != -1) {
+                        if(Type != ScreenType.MainActivity.getId()) {
                             lvAnsGroup.setEnabled(true);
                         }
                     }

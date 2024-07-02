@@ -18,6 +18,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.google.android.material.navigation.NavigationView;
+import com.websarva.wings.android.higengokun.enums.ScreenType;
 import com.websarva.wings.android.higengokun.models.Question;
 import com.websarva.wings.android.higengokun.utils.*;
 
@@ -116,7 +117,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     public void onClickStart(View view) {
         Intent intent = new Intent(MainActivity.this, QuestionActivity.class);
-        intent.putExtra("pos", -1);
+        intent.putExtra("Type", ScreenType.MainActivity.getId());
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
         overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);

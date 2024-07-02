@@ -25,6 +25,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 
 import com.google.android.material.navigation.NavigationView;
 import com.websarva.wings.android.higengokun.enums.Category;
+import com.websarva.wings.android.higengokun.enums.ScreenType;
 import com.websarva.wings.android.higengokun.models.Question;
 import com.websarva.wings.android.higengokun.utils.NavigationManager;
 import com.websarva.wings.android.higengokun.utils.OriginalRowAdapter;
@@ -235,7 +236,8 @@ public class CategoryActivity extends AppCompatActivity implements NavigationVie
             if(actionMode != Category.ALL)//アクションモードがallじゃない場合に関数実行
                 position = Question.getQuestionFromCategory(actionMode,position);
             Intent intent = new Intent(CategoryActivity.this, QuestionActivity.class);
-            intent.putExtra("pos",position);
+            intent.putExtra("Number",position);
+            intent.putExtra("Type", ScreenType.CategoryActivity.getId());
             startActivity(intent);
 
         }
