@@ -17,7 +17,7 @@ public class TrackContextUtil {
     //trackContextの設定
 
     //項目のR値
-    static int[] menuItems = {R.id.trackContext3, R.id.trackContext2, R.id.trackContext1};
+    private final int[] menuItems = {R.id.trackContext3, R.id.trackContext2, R.id.trackContext1};
 
 
     public void setTrackContext(ContextMenu menu, MenuInflater inflater, Queue<Boolean> recent){
