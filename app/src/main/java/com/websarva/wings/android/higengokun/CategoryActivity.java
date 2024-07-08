@@ -50,9 +50,6 @@ public class CategoryActivity extends AppCompatActivity implements NavigationVie
     private ActionBarDrawerToggle toggle;
     private NavigationManager navigationManager;
     private Category actionMode = Category.ALL;
-    //項目のR値
-    int[] menuItems = {R.id.trackContext3, R.id.trackContext2, R.id.trackContext1};
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -251,7 +248,7 @@ public class CategoryActivity extends AppCompatActivity implements NavigationVie
         int position = info.position;
         TrackContextUtil util = new TrackContextUtil();
         util.setTrackContext(menu,getMenuInflater(),Question.getRecentAnswers(actionMode, position));
-        }
+    }
 
 
 }

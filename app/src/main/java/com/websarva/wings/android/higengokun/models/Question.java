@@ -196,7 +196,7 @@ public class Question  {
     }
 
     //苦手問題かどうかを判定
-    private static boolean isWeekQuestion(Queue<Boolean> recent) {
+    public static boolean isWeekQuestion(Queue<Boolean> recent) {
         return recent.contains(false);
     }
 
@@ -219,5 +219,17 @@ public class Question  {
             Type type = new TypeToken<Queue<Boolean>>() {}.getType();
             this.recentAnswers = gson.fromJson(json, type);
         }
+    }
+
+    public static int countWeak(){
+        int cnt = 0;
+
+        for(int i = 0; i < NumberOfQuestions; i++){
+            if(isWeekQuestion(getRecentAnswers(i))){
+                cnt++;
+            }
+        }
+
+        return cnt;
     }
 }

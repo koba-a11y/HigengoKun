@@ -127,8 +127,14 @@ public class QuestionActivity extends AppCompatActivity {
                 assert question != null;
                 actionBar.setTitle("カテゴリー:"+Question.getCategory(Question.geterCategory(question)));
             }else if(Type == ScreenType.WeaknessActivity.getId()){//FromWeaknessActivity
-                Question.makeWeaknessList();
-                question = Question.getQuestion(Question._questionsList.get(arryindex));
+                Number = (int)intent.getIntExtra("Number",-1);
+                if(Number == -1) {
+                    Question.makeWeaknessList();
+                    question = Question.getQuestion(Question._questionsList.get(arryindex));
+                } else {
+                    question = Question.getQuestion(Number);
+                    cnt = 100;
+                }
             }
         }
 
@@ -176,6 +182,14 @@ public class QuestionActivity extends AppCompatActivity {
 
     public void onClickNext(View view) {
         cnt++;
+        if(cnt > 99){
+            response.r_time = (String) tvCount.getText();
+            Intent intent = new Intent(QuestionActivity.this, WeaknessActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(intent);
+            overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+            finish();
+        }
         if(cnt > 10 || cnt > Question._questionsList.size()) {//10問終了
             response.r_time = (String) tvCount.getText();
             Intent intent = new Intent(QuestionActivity.this, ResultActivity.class);

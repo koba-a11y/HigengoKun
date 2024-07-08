@@ -40,4 +40,6 @@
     <string name="track_context_false">不正解</string>
     <string name="track_context_new">新</string>
     <string name="track_context_old">古</string>
+
+    <string name="tv_weak">苦手問題はありません！</string>
 </resources>
