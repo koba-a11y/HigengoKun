@@ -98,6 +98,12 @@ public class WeaknessActivity extends AppCompatActivity implements NavigationVie
     private class ListItemClickListener implements AdapterView.OnItemClickListener{
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+            Log.d("WeaknessActivity", "onItemClick: tap position"+position);
+            Log.d("WeaknessActivity", "onItemClick: tap numbers"+numbers.get(position));
+            for(int i:numbers){
+                Log.d("WeaknessActivity", "onItemClick: numbers"+i);
+            }
             Intent intent = new Intent(WeaknessActivity.this, QuestionActivity.class);
             position = numbers.get(position);
             intent.putExtra("Type", ScreenType.WeaknessActivity.getId());
@@ -106,6 +112,8 @@ public class WeaknessActivity extends AppCompatActivity implements NavigationVie
             startActivity(intent);
             overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
             finish();
+
+
         }
     }
 
@@ -160,8 +168,6 @@ public class WeaknessActivity extends AppCompatActivity implements NavigationVie
         for(int i = 0; i< Question.NumberOfQuestions; i++) {
             if(Question.isWeekQuestion(Question.getRecentAnswers(i))){
                 numbers.add(i);
-                Log.d("WeaknessActivity", "Weak question found: " + i); // デバッグログを追加
-                Log.d("WeaknessActivity", "Weak question Numbers: " + numbers.get(0)); // デバッグログを追加
                 Question question = Question.getQuestion(i);
                 Map<String, String> _weakItem = new HashMap<>();
                 _weakItem.put("category", Question.getCategory(Question.geterCategory(question)) + ":");

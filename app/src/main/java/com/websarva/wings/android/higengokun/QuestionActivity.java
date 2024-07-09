@@ -10,6 +10,7 @@ import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.AlphaAnimation;
@@ -31,14 +32,6 @@ import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.Timer;
 import java.util.TimerTask;
-
-/*TODO
-* WeekActivityから遷移したことがわかる処理
-*   intentにbefore等を追加してenumにアクティビティの値を設定する？
-*   posに関連する処理を直す
-* posの名前の変更
-*   一つ前の画面所法をbeforeでやるならposの名前を変える。(分かりにくすぎる)
-* */
 
 public class QuestionActivity extends AppCompatActivity {
 
@@ -127,16 +120,19 @@ public class QuestionActivity extends AppCompatActivity {
                 assert question != null;
                 actionBar.setTitle("カテゴリー:"+Question.getCategory(Question.geterCategory(question)));
             }else if(Type == ScreenType.WeaknessActivity.getId()){//FromWeaknessActivity
-                Number = (int)intent.getIntExtra("Number",-1);
+                Number = intent.getIntExtra("Number",-1);
                 if(Number == -1) {
                     Question.makeWeaknessList();
                     question = Question.getQuestion(Question._questionsList.get(arryindex));
                 } else {
                     question = Question.getQuestion(Number);
-                    cnt = 100;
+                    //cnt = 100;
                 }
             }
         }
+
+        Log.d("QuestionActivity", "onCreate: type"+Type);
+        Log.d("QuestionActivity", "onCreate: Number"+Number);
 
 
 
@@ -182,15 +178,12 @@ public class QuestionActivity extends AppCompatActivity {
 
     public void onClickNext(View view) {
         cnt++;
-        if(cnt > 99){
-            response.r_time = (String) tvCount.getText();
+        if(Type == ScreenType.WeaknessActivity.getId() && Number != -1){
             Intent intent = new Intent(QuestionActivity.this, WeaknessActivity.class);
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);
-            overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+            overridePendingTransition(R.anim.slide_out_left, R.anim.slide_in_right);
             finish();
-        }
-        if(cnt > 10 || cnt > Question._questionsList.size()) {//10問終了
+        }else if(cnt > 10 || cnt > Question._questionsList.size()) {//10問終了
             response.r_time = (String) tvCount.getText();
             Intent intent = new Intent(QuestionActivity.this, ResultActivity.class);
             intent.putExtra("Res", response);
@@ -212,6 +205,17 @@ public class QuestionActivity extends AppCompatActivity {
         boolean returnVal = true;
         int itemId = item.getItemId();
         if(itemId == android.R.id.home) {
+            if(Type == ScreenType.CategoryActivity.getId()){
+                Intent intent = new Intent(QuestionActivity.this,CategoryActivity.class);
+                startActivity(intent);
+                overridePendingTransition(R.anim.slide_out_left, R.anim.slide_in_right);
+                finish();
+            }else if(Type == ScreenType.WeaknessActivity.getId()) {
+                Intent intent = new Intent(QuestionActivity.this,WeaknessActivity.class);
+                startActivity(intent);
+                overridePendingTransition(R.anim.slide_out_left, R.anim.slide_in_right);
+                finish();
+            }
             finish();
         } else {
             returnVal = super.onOptionsItemSelected(item);

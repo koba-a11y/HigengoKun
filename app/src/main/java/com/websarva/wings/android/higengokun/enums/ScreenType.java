@@ -1,8 +1,6 @@
 package com.websarva.wings.android.higengokun.enums;
 
-import com.websarva.wings.android.higengokun.ResultActivity;
 
-//CategoryActivityへ遷移する可能性があるもの
 public enum ScreenType {
     MainActivity(-1),
     WeaknessActivity(-2),
