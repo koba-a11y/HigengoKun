@@ -99,11 +99,6 @@ public class WeaknessActivity extends AppCompatActivity implements NavigationVie
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-            Log.d("WeaknessActivity", "onItemClick: tap position"+position);
-            Log.d("WeaknessActivity", "onItemClick: tap numbers"+numbers.get(position));
-            for(int i:numbers){
-                Log.d("WeaknessActivity", "onItemClick: numbers"+i);
-            }
             Intent intent = new Intent(WeaknessActivity.this, QuestionActivity.class);
             position = numbers.get(position);
             intent.putExtra("Type", ScreenType.WeaknessActivity.getId());
@@ -160,6 +155,14 @@ public class WeaknessActivity extends AppCompatActivity implements NavigationVie
         if (toggle.onOptionsItemSelected(item)) {
             return true;
         }
+        if(item.getItemId() == R.id.action_home){
+            Intent intent = new Intent(this, MainActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(intent);
+            overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
+            finish();
+            return true;
+        }
         return super.onOptionsItemSelected(item);
     }
 
@@ -187,4 +190,5 @@ public class WeaknessActivity extends AppCompatActivity implements NavigationVie
         TrackContextUtil util = new TrackContextUtil();
         util.setTrackContext(menu,getMenuInflater(),Question.getRecentAnswers(numbers.get(position)));
     }
+
 }

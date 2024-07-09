@@ -126,13 +126,10 @@ public class QuestionActivity extends AppCompatActivity {
                     question = Question.getQuestion(Question._questionsList.get(arryindex));
                 } else {
                     question = Question.getQuestion(Number);
-                    //cnt = 100;
                 }
             }
         }
 
-        Log.d("QuestionActivity", "onCreate: type"+Type);
-        Log.d("QuestionActivity", "onCreate: Number"+Number);
 
 
 
