@@ -25,9 +25,11 @@ import androidx.drawerlayout.widget.DrawerLayout;
 
 import com.google.android.material.navigation.NavigationView;
 import com.websarva.wings.android.higengokun.enums.Category;
+import com.websarva.wings.android.higengokun.enums.ScreenType;
 import com.websarva.wings.android.higengokun.models.Question;
 import com.websarva.wings.android.higengokun.utils.NavigationManager;
 import com.websarva.wings.android.higengokun.utils.OriginalRowAdapter;
+import com.websarva.wings.android.higengokun.utils.TrackContextUtil;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -48,9 +50,6 @@ public class CategoryActivity extends AppCompatActivity implements NavigationVie
     private ActionBarDrawerToggle toggle;
     private NavigationManager navigationManager;
     private Category actionMode = Category.ALL;
-    //項目のR値
-    int[] menuItems = {R.id.trackContext3, R.id.trackContext2, R.id.trackContext1};
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -234,7 +233,8 @@ public class CategoryActivity extends AppCompatActivity implements NavigationVie
             if(actionMode != Category.ALL)//アクションモードがallじゃない場合に関数実行
                 position = Question.getQuestionFromCategory(actionMode,position);
             Intent intent = new Intent(CategoryActivity.this, QuestionActivity.class);
-            intent.putExtra("pos",position);
+            intent.putExtra("Number",position);
+            intent.putExtra("Type", ScreenType.CategoryActivity.getId());
             startActivity(intent);
 
         }
@@ -244,58 +244,12 @@ public class CategoryActivity extends AppCompatActivity implements NavigationVie
     @Override
     public void onCreateContextMenu(ContextMenu menu, View view, ContextMenu.ContextMenuInfo menuInfo){
         super.onCreateContextMenu(menu, view, menuInfo);
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.track_context_menu_list, menu);
-        menu.setHeaderTitle(R.string.track_context_title);
-
-
         AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) menuInfo;
         int position = info.position;
-        Queue<Boolean> recent = Question.getRecentAnswers(actionMode, position);
-
-
-        //Queueの要素数で項目を表示、非表示
-        int size = recent.size();
-        for(int i = 0; i < menuItems.length; i++) {
-            MenuItem item =menu.findItem(menuItems[i]);
-            if(i < size) {
-                item.setVisible(true);
-                if(recent.poll()){
-                    item.setTitle(R.string.track_context_true);
-                }else {
-                    item.setTitle(R.string.track_context_false);
-                }
-            }else {
-                item.setVisible(false);
-            }
-        }
-
-        // カスタムスタイルを適用するアイテムを取得
-        MenuItem trackContextNew = menu.findItem(R.id.trackContextNew);
-        MenuItem trackContextOld = menu.findItem(R.id.trackContextOld);
-
-        // スタイルを適用する
-        applyCustomStyleForMenuItems(menu);
-        applyCustomStyleGray(trackContextNew);
-        applyCustomStyleGray(trackContextOld);
-
+        TrackContextUtil util = new TrackContextUtil();
+        util.setTrackContext(menu,getMenuInflater(),Question.getRecentAnswers(actionMode, position));
     }
 
-    //なんかスタイル適用するやつ
-    private void applyCustomStyleForMenuItems(ContextMenu menu) {
-        for (int i = 0; i < menu.size(); i++) {
-            MenuItem item = menu.getItem(i);
-            SpannableString spanString = new SpannableString(item.getTitle().toString());
-            spanString.setSpan(new ForegroundColorSpan(Color.BLACK), 0, spanString.length(), 0); // 黒色に設定
-            item.setTitle(spanString);
-        }
-    }
-    private void applyCustomStyleGray(MenuItem item) {
-        SpannableString spanString = new SpannableString(item.getTitle().toString());
-        spanString.setSpan(new ForegroundColorSpan(Color.GRAY), 0, spanString.length(), 0); // テキストカラーを赤色に設定
-        spanString.setSpan(new AbsoluteSizeSpan(11, true), 0, spanString.length(), 0); // 文字サイズを設定
-        item.setTitle(spanString);
-    }
 
 }
 

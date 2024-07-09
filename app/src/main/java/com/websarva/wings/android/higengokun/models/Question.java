@@ -27,7 +27,7 @@ public class Question  {
     private Queue<Boolean> recentAnswers;//各問題直近3回の回答履歴
 
     private static final Question[] questions = new Question[NumberOfQuestions];
-    public static ArrayList<Integer> rndlist = new ArrayList<>();
+    public static ArrayList<Integer> _questionsList = new ArrayList<>();
 
 
     private Question(Category q_category, int q_RID, String[] choices, int ans_index) {
@@ -51,15 +51,13 @@ public class Question  {
         return question.choices;
     }
 
-
-    //乱数の準備
-    public static void makernd() {
+    //問題の準備
+    public static void makeQuestions() {
         for(int i = 0; i < NumberOfQuestions; i++){
-            rndlist.add(i);
+            _questionsList.add(i);
         }
-        Collections.shuffle(rndlist);
+        Collections.shuffle(_questionsList);
     }
-
 
     //問題の登録
     public static void init() {
@@ -130,7 +128,6 @@ public class Question  {
         return questions[num];
     }
 
-
     public static String getCategory(Category cat) {
         switch (cat) {
             case BAAI:
@@ -149,7 +146,6 @@ public class Question  {
                 return "エラー";
         }
     }
-
 
     private static int questionSearch(Category cat, int pos){
         int questionsIndex = 0;
@@ -181,9 +177,6 @@ public class Question  {
         return new LinkedList<>(questions[number].recentAnswers);
     }
 
-
-
-
     //直近３回の回答履歴を更新
     public void addAnswer(boolean isCorrect) {
         if(recentAnswers.size() >=3) {
@@ -192,11 +185,19 @@ public class Question  {
         recentAnswers.add(isCorrect);
     }
 
-
+    public static void makeWeaknessList(){
+        _questionsList.clear();
+        for(int i = 0; i < NumberOfQuestions; i++) {
+            if(isWeekQuestion(Question.questions[i].recentAnswers)){
+                _questionsList.add(i);
+            }
+        }
+        Collections.shuffle(_questionsList);
+    }
 
     //苦手問題かどうかを判定
-    public boolean isWeekQuestion() {
-        return recentAnswers.contains(false);
+    public static boolean isWeekQuestion(Queue<Boolean> recent) {
+        return recent.contains(false);
     }
 
     //回答履歴を保存
@@ -218,5 +219,17 @@ public class Question  {
             Type type = new TypeToken<Queue<Boolean>>() {}.getType();
             this.recentAnswers = gson.fromJson(json, type);
         }
+    }
+
+    public static int countWeak(){
+        int cnt = 0;
+
+        for(int i = 0; i < NumberOfQuestions; i++){
+            if(isWeekQuestion(getRecentAnswers(i))){
+                cnt++;
+            }
+        }
+
+        return cnt;
     }
 }
