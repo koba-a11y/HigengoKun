@@ -42,4 +42,26 @@
     <string name="track_context_old">古</string>
 
     <string name="tv_weak">苦手問題はありません！</string>
+
+    <string name="tv_desc_overview_title">問題</string>
+    <string name="tv_desc_overview_1">\t問題については以下のサイトのものを使用しています。許可は得ていません。</string>
+    <string name="tv_desc_overView_web">https://saisokuspi.com/</string>
+
+    <string name="tv_desc_login_title">ログイン機能</string>
+    <string name="tv_desc_login_1">\tアプリ起動時は以下の画面になっています。「タップして日付を表示」をタップしたのち確認したい日付をタップしてください。</string>
+    <string name="tv_desc_login_2">\tログインをしていると以下のようになります。</string>
+    <string name="tv_desc_login_3">\tログイン履歴を残すには「ホーム」タブから問題を10問解いてください。適当に解くと保存されない可能性があるので注意してください。</string>
+
+    <string name="tv_desc_result_title">リザルト画面</string>
+    <string name="tv_desc_result_1">\tリザルト画面は以下のようになっています。</string>
+    <string name="tv_desc_result_2">\tリストをタップすることで、該当の問題を解きなおすことができます。</string>
+
+    <string name="tv_desc_category_title">カテゴリー別</string>
+    <string name="tv_desc_category">\t「カテゴリー別」タブを開くと最初はすべてのカテゴリーが表示されています。以下の３点リーダーから該当のカテゴリーを選んでください。すべて表示に戻したかったら「全部！」と書かれているボタンを押してください。</string>
+
+    <string name="tv_desc_weak_title">苦手問題</string>
+    <string name="tv_desc_weak">苦手問題は過去３回中一回でも間違えていれば苦手問題に登録されます。過去３回すべて正解になることで苦手問題から削除されます。\n\t過去３回の回答履歴を確認するには「カテゴリー別」「苦手問題」「リザルト画面」に表示されるリスト内の問題を長押ししてください。</string>
+
+
+
 </resources>

@@ -7,7 +7,9 @@ import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
 import android.os.Bundle;
+import android.text.method.LinkMovementMethod;
 import android.view.MenuItem;
+import android.widget.TextView;
 
 import com.google.android.material.navigation.NavigationView;
 import com.websarva.wings.android.higengokun.utils.NavigationManager;
@@ -19,6 +21,8 @@ public class DescriptionActivity extends AppCompatActivity implements Navigation
     private DrawerLayout drawerLayout;
     private ActionBarDrawerToggle toggle;
     private NavigationManager navigationManager;
+
+    TextView tvDescOverviewWeb;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,6 +51,10 @@ public class DescriptionActivity extends AppCompatActivity implements Navigation
             actionBar.setDisplayHomeAsUpEnabled(true);
             actionBar.setHomeButtonEnabled(true);
         }
+
+        //リンクを有効にする
+        tvDescOverviewWeb = findViewById(R.id.tvDescOverviewWeb);
+        tvDescOverviewWeb.setMovementMethod(LinkMovementMethod.getInstance());
     }
 
     //サイドバーをタップした時の処理
