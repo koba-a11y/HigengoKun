@@ -23,7 +23,7 @@
     <string name="tv_played_check_true">やった</string>
     <string name="tv_played_check_flase">やってない</string>
     <string name="bt_Category">カテゴリー別に選択！</string>
-    <string name="bt_start">Start!</string>
+    <string name="bt_start">Start</string>
 
     <string name="_00_00">00:00</string>
     <string name="ab_qcnt">問目！！</string>
@@ -44,7 +44,7 @@
     <string name="tv_weak">苦手問題はありません！</string>
 
     <string name="tv_desc_overview_title">問題</string>
-    <string name="tv_desc_overview_1">\t問題については以下のサイトのものを使用しています。許可は得ていません。</string>
+    <string name="tv_desc_overview_1">\t表示しきれなくなった問題や、解答群は下にスワイプすることで、表示されます。\n\t問題については以下のサイトのものを使用しています。許可は得ていません。</string>
     <string name="tv_desc_overView_web">https://saisokuspi.com/</string>
 
     <string name="tv_desc_login_title">ログイン機能</string>
