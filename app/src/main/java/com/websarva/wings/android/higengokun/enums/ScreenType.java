@@ -6,6 +6,8 @@ public enum ScreenType {
     WeaknessActivity(-2),
     ResultActivity(-3),
     CategoryActivity(-4),
+    QuestionActivity(-5),
+    DescriptionActivity(-6),
     ;
 
     private final int id;
