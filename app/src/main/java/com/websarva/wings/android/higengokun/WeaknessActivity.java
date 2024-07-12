@@ -8,6 +8,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 
 import android.content.Intent;
 import android.graphics.Typeface;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.ContextMenu;
@@ -39,6 +40,7 @@ public class WeaknessActivity extends AppCompatActivity implements NavigationVie
     private ActionBarDrawerToggle toggle;
     private NavigationManager navigationManager;
     private List<Map<String,String>> _weakList;
+    private MediaPlayer mediaPlayer;
 
     TextView tvWeak;
     ListView lvWeak;
@@ -59,6 +61,10 @@ public class WeaknessActivity extends AppCompatActivity implements NavigationVie
 
         numbers = new ArrayList<>();
 
+        // MediaPlayerのインスタンスを作成してBGMを再生
+        mediaPlayer = MediaPlayer.create(this, R.raw.bgm_main);
+        mediaPlayer.setLooping(true);
+        mediaPlayer.start();
         //フォントの変更
         Typeface ronde = Typeface.createFromAsset(getAssets(), "Ronde-B_square.otf");
         tvWeak.setTypeface(ronde);
@@ -190,5 +196,26 @@ public class WeaknessActivity extends AppCompatActivity implements NavigationVie
         TrackContextUtil util = new TrackContextUtil();
         util.setTrackContext(menu,getMenuInflater(),Question.getRecentAnswers(numbers.get(position)));
     }
+
+    @Override
+    protected void onPause(){
+        super.onPause();
+        // クエッションアクティビティへ遷移するときにBGMを停止
+        if (mediaPlayer != null && mediaPlayer.isPlaying()) {
+            mediaPlayer.pause();
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        // アクティビティ終了時にMediaPlayerとSoundPoolを解放
+        if (mediaPlayer != null) {
+            mediaPlayer.release();
+            mediaPlayer = null;
+        }
+    }
+
+
 
 }

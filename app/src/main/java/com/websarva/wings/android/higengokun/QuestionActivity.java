@@ -7,6 +7,9 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.graphics.Typeface;
+import android.media.AudioAttributes;
+import android.media.MediaPlayer;
+import android.media.SoundPool;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -45,7 +48,7 @@ public class QuestionActivity extends AppCompatActivity {
     ImageView ivResult;
     Handler handler;
 
-    private int Type ;
+    private int Type;
     private int Number;
 
     private Response response;
@@ -54,8 +57,10 @@ public class QuestionActivity extends AppCompatActivity {
 
     private int cnt = 1;
     private int arryindex;
-
-
+    private MediaPlayer mediaPlayer;
+    private SoundPool soundPool;
+    private int soundEffect_true;
+    private int soundEffect_false;
 
 
     @RequiresApi(api = Build.VERSION_CODES.O)
@@ -77,11 +82,30 @@ public class QuestionActivity extends AppCompatActivity {
         handler = new Handler();
 
 
+        // MediaPlayerのインスタンスを作成してBGMを再生
+        mediaPlayer = MediaPlayer.create(this, R.raw.bgm_question);
+        mediaPlayer.setLooping(true);
+        mediaPlayer.start();
+
+        // SoundPoolのインスタンスを作成してSEをロード
+        AudioAttributes audioAttributes = new AudioAttributes.Builder()
+                .setUsage(AudioAttributes.USAGE_GAME)
+                .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
+                .build();
+
+        soundPool = new SoundPool.Builder()
+                .setMaxStreams(1)
+                .setAudioAttributes(audioAttributes)
+                .build();
+
+        soundEffect_true = soundPool.load(this, R.raw.se_true, 1);
+        soundEffect_false = soundPool.load(this, R.raw.se_false, 1);
+
 
 
         //アクションバー設定
         actionBar = getSupportActionBar();
-        if(actionBar != null) {
+        if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
             actionBar.setTitle(Integer.valueOf(cnt).toString() + getString(R.string.ab_qcnt));
         }
@@ -95,7 +119,6 @@ public class QuestionActivity extends AppCompatActivity {
                 tvQuestion.getPaddingBottom() + extraPaddingTopBottom);
 
 
-
         //フォント
         Typeface nikkyou = Typeface.createFromAsset(getAssets(), "NikkyouSans-mLKax.ttf");
         tvCount.setTypeface(nikkyou);
@@ -104,24 +127,23 @@ public class QuestionActivity extends AppCompatActivity {
         Arrays.fill(response.r_ID, Integer.MIN_VALUE);//r_IDをInteger.MIN_VALUEで初期化
 
 
-
         //問題の初期化
         Question.makeQuestions();
         //問題処理
         Intent intent = getIntent();
-        if(intent != null) {
-            Type =intent.getIntExtra("Type",-1);
-            if(Type == ScreenType.MainActivity.getId()){//FromMainActivity
+        if (intent != null) {
+            Type = intent.getIntExtra("Type", -1);
+            if (Type == ScreenType.MainActivity.getId()) {//FromMainActivity
                 question = Question.getQuestion(Question._questionsList.get(arryindex));
-            } else if(Type == ScreenType.CategoryActivity.getId() || Type == ScreenType.ResultActivity.getId()){//FromCategoryOrResultActivity
-                Number = intent.getIntExtra("Number",-1);
+            } else if (Type == ScreenType.CategoryActivity.getId() || Type == ScreenType.ResultActivity.getId()) {//FromCategoryOrResultActivity
+                Number = intent.getIntExtra("Number", -1);
                 btNext.setVisibility(View.INVISIBLE);
                 question = Question.getQuestion(Number);
                 assert question != null;
-                actionBar.setTitle("カテゴリー:"+Question.getCategory(Question.geterCategory(question)));
-            }else if(Type == ScreenType.WeaknessActivity.getId()){//FromWeaknessActivity
-                Number = intent.getIntExtra("Number",-1);
-                if(Number == -1) {
+                actionBar.setTitle("カテゴリー:" + Question.getCategory(Question.geterCategory(question)));
+            } else if (Type == ScreenType.WeaknessActivity.getId()) {//FromWeaknessActivity
+                Number = intent.getIntExtra("Number", -1);
+                if (Number == -1) {
                     Question.makeWeaknessList();
                     question = Question.getQuestion(Question._questionsList.get(arryindex));
                 } else {
@@ -129,9 +151,6 @@ public class QuestionActivity extends AppCompatActivity {
                 }
             }
         }
-
-
-
 
         show();
 
@@ -147,22 +166,24 @@ public class QuestionActivity extends AppCompatActivity {
 
     private class ListItemClickListener implements AdapterView.OnItemClickListener {
         @Override
-        public void onItemClick(AdapterView<?> parent, View view, int position, long id){
-            if(position == Question.geterAindex(question)) {
+        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            if (position == Question.geterAindex(question)) {
                 ivResult.setImageResource(R.drawable.animal_quiz_neko_maru);
+                soundPool.play(soundEffect_true, 1, 1, 0, 0, 1);
                 popResult();
-                response.r_ans[cnt-1] = true;
+                response.r_ans[cnt - 1] = true;
                 response.r_tcnt += 1;
 
-            }else {
+            } else {
                 ivResult.setImageResource(R.drawable.animal_quiz_neko_batsu);
+                soundPool.play(soundEffect_false, 1, 1, 0, 0, 1);
                 popResult();
-                response.r_ans[cnt-1] = false;
+                response.r_ans[cnt - 1] = false;
             }
-            response.r_choice[cnt-1] = position;
-            if(Type == ScreenType.MainActivity.getId() || Type == ScreenType.WeaknessActivity.getId()) {//From MainActivity or ResultActivity
+            response.r_choice[cnt - 1] = position;
+            if (Type == ScreenType.MainActivity.getId() || Type == ScreenType.WeaknessActivity.getId()) {//From MainActivity or ResultActivity
                 lvAnsGroup.setEnabled(false);
-                question.addAnswer(response.r_ans[cnt-1]);//回答履歴の保存
+                question.addAnswer(response.r_ans[cnt - 1]);//回答履歴の保存
                 question.saveRecentAnswers(QuestionActivity.this);
             }
             question.saveRecentAnswers(QuestionActivity.this);
@@ -172,15 +193,14 @@ public class QuestionActivity extends AppCompatActivity {
     }
 
 
-
     public void onClickNext(View view) {
         cnt++;
-        if(Type == ScreenType.WeaknessActivity.getId() && Number != -1){
+        if (Type == ScreenType.WeaknessActivity.getId() && Number != -1) {
             Intent intent = new Intent(QuestionActivity.this, WeaknessActivity.class);
             startActivity(intent);
             overridePendingTransition(R.anim.slide_out_left, R.anim.slide_in_right);
             finish();
-        }else if(cnt > 10 || cnt > Question._questionsList.size()) {//10問終了
+        } else if (cnt > 10 || cnt > Question._questionsList.size()) {//10問終了
             response.r_time = (String) tvCount.getText();
             Intent intent = new Intent(QuestionActivity.this, ResultActivity.class);
             intent.putExtra("Res", response);
@@ -188,7 +208,7 @@ public class QuestionActivity extends AppCompatActivity {
             startActivity(intent);
             overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
             finish();
-        }else {
+        } else {
             actionBar.setTitle(Integer.valueOf(cnt).toString() + getString(R.string.ab_qcnt));
             question = Question.getQuestion(Question._questionsList.get(arryindex));
             show();
@@ -201,14 +221,14 @@ public class QuestionActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         boolean returnVal = true;
         int itemId = item.getItemId();
-        if(itemId == android.R.id.home) {
-            if(Type == ScreenType.CategoryActivity.getId()){
-                Intent intent = new Intent(QuestionActivity.this,CategoryActivity.class);
+        if (itemId == android.R.id.home) {
+            if (Type == ScreenType.CategoryActivity.getId()) {
+                Intent intent = new Intent(QuestionActivity.this, CategoryActivity.class);
                 startActivity(intent);
                 overridePendingTransition(R.anim.slide_out_left, R.anim.slide_in_right);
                 finish();
-            }else if(Type == ScreenType.WeaknessActivity.getId()) {
-                Intent intent = new Intent(QuestionActivity.this,WeaknessActivity.class);
+            } else if (Type == ScreenType.WeaknessActivity.getId()) {
+                Intent intent = new Intent(QuestionActivity.this, WeaknessActivity.class);
                 startActivity(intent);
                 overridePendingTransition(R.anim.slide_out_left, R.anim.slide_in_right);
                 finish();
@@ -221,19 +241,19 @@ public class QuestionActivity extends AppCompatActivity {
     }
 
     void show() {
-        if(question != null) {
-            response.r_ID[cnt-1] = Question._questionsList.get(arryindex);
-            response.r_category[cnt-1] = Question.geterCategory(question);
+        if (question != null) {
+            response.r_ID[cnt - 1] = Question._questionsList.get(arryindex);
+            response.r_category[cnt - 1] = Question.geterCategory(question);
             lvAnsGroup.setEnabled(true);
             tvQuestion.setText(getString(Question.geterRid(question)));
-            ArrayAdapter<String>adapter = new ArrayAdapter<>(QuestionActivity.this, android.R.layout.simple_list_item_1, Question.geterChoices(question));
+            ArrayAdapter<String> adapter = new ArrayAdapter<>(QuestionActivity.this, android.R.layout.simple_list_item_1, Question.geterChoices(question));
             lvAnsGroup.setAdapter(adapter);
             arryindex++;
         }
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
-    void setTimer () {
+    void setTimer() {
         /*タイマー処理*/
         //既に Start ボタンが押されてタイマーが起動中の場合
         if (timer != null) {
@@ -260,7 +280,7 @@ public class QuestionActivity extends AppCompatActivity {
         }, 0, period);
     }
 
-    private void popResult(){
+    private void popResult() {
         // フェードインアニメーション
         AlphaAnimation fadeIn = new AlphaAnimation(0, 1);
         fadeIn.setDuration(500); // 0.5秒かけてフェードイン
@@ -278,18 +298,20 @@ public class QuestionActivity extends AppCompatActivity {
                 fadeOut.setDuration(500); // 0.5秒かけてフェードアウト
                 fadeOut.setAnimationListener(new AlphaAnimation.AnimationListener() {
                     @Override
-                    public void onAnimationStart(Animation animation) {}
+                    public void onAnimationStart(Animation animation) {
+                    }
 
                     @Override
                     public void onAnimationEnd(Animation animation) {
                         ivResult.setVisibility(View.GONE);
-                        if(Type != ScreenType.MainActivity.getId()) {
+                        if (Type != ScreenType.MainActivity.getId()) {
                             lvAnsGroup.setEnabled(true);
                         }
                     }
 
                     @Override
-                    public void onAnimationRepeat(Animation animation) {}
+                    public void onAnimationRepeat(Animation animation) {
+                    }
                 });
 
                 ivResult.startAnimation(fadeOut);
@@ -297,4 +319,16 @@ public class QuestionActivity extends AppCompatActivity {
         }, 2000); // 2秒後に実行
 
     }
+
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        // アクティビティ終了時にMediaPlayerとSoundPoolを解放
+        if (mediaPlayer != null) {
+            mediaPlayer.release();
+            mediaPlayer = null;
+        }
+    }
+
 }

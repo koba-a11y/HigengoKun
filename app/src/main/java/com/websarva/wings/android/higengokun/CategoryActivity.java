@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.text.SpannableString;
 import android.text.style.AbsoluteSizeSpan;
@@ -50,6 +51,7 @@ public class CategoryActivity extends AppCompatActivity implements NavigationVie
     private ActionBarDrawerToggle toggle;
     private NavigationManager navigationManager;
     private Category actionMode = Category.ALL;
+    private MediaPlayer mediaPlayer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,6 +65,12 @@ public class CategoryActivity extends AppCompatActivity implements NavigationVie
 
         navigationManager = NavigationManager.getInstance();
         navigationManager.setDrawerLayout(findViewById(R.id.drawer_layout));
+
+        // MediaPlayerのインスタンスを作成してBGMを再生
+        mediaPlayer = MediaPlayer.create(this, R.raw.bgm_main);
+        mediaPlayer.setLooping(true);
+        mediaPlayer.start();
+
 
         // ナビゲーション(side)の設定
         NavigationView navigationView = findViewById(R.id.nav_view);
@@ -248,6 +256,26 @@ public class CategoryActivity extends AppCompatActivity implements NavigationVie
         int position = info.position;
         TrackContextUtil util = new TrackContextUtil();
         util.setTrackContext(menu,getMenuInflater(),Question.getRecentAnswers(actionMode, position));
+    }
+
+    @Override
+    protected void onPause(){
+        super.onPause();
+        // アクティビティ終了時にMediaPlayerとSoundPoolを解放
+        if (mediaPlayer != null) {
+            mediaPlayer.release();
+            mediaPlayer = null;
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        // アクティビティ終了時にMediaPlayerとSoundPoolを解放
+        if (mediaPlayer != null) {
+            mediaPlayer.release();
+            mediaPlayer = null;
+        }
     }
 
 

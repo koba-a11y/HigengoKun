@@ -11,6 +11,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.graphics.Typeface;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
@@ -34,6 +35,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private DrawerLayout drawerLayout;
     private ActionBarDrawerToggle toggle;
     private NavigationManager navigationManager;
+    private MediaPlayer mediaPlayer;
+    private boolean isQuestionActivityTransition = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,6 +50,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         navigationManager = NavigationManager.getInstance();
         navigationManager.setDrawerLayout(findViewById(R.id.drawer_layout));
+
+        // MediaPlayerのインスタンスを作成してBGMを再生
+        mediaPlayer = MediaPlayer.create(this, R.raw.bgm_main);
+        mediaPlayer.setLooping(true);
+        mediaPlayer.start();
 
 
         //ナビゲーション(side)の設定
@@ -116,6 +124,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
 
     public void onClickStart(View view) {
+        isQuestionActivityTransition = true;
         Intent intent = new Intent(MainActivity.this, QuestionActivity.class);
         intent.putExtra("Type", ScreenType.MainActivity.getId());
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -137,10 +146,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         int id = item.getItemId();
 
         if (id == R.id.nav_desc) {
+            isQuestionActivityTransition = false;
             navigationManager.navigateToActivity(this,DescriptionActivity.class);
         } else if (id == R.id.nav_category) {
+            isQuestionActivityTransition = false;
             navigationManager.navigateToActivity(this,CategoryActivity.class);
         } else if (id == R.id.nav_weakness) {
+            isQuestionActivityTransition = false;
             navigationManager.navigateToActivity(this, WeaknessActivity.class);
         }
         drawerLayout.closeDrawer(GravityCompat.START);
@@ -154,6 +166,41 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if (mediaPlayer != null && mediaPlayer.isPlaying()) {
+            mediaPlayer.pause();
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        // クエッションアクティビティから戻ってきたときにBGMを最初から再生
+        if (isQuestionActivityTransition && mediaPlayer != null) {
+            mediaPlayer.seekTo(0);  // 再生位置を最初に戻す
+            mediaPlayer.start();
+        }
+        // クエッションアクティビティ以外から戻ってきたときにBGMを再開
+        else if (!isQuestionActivityTransition && mediaPlayer != null && !mediaPlayer.isPlaying()) {
+            mediaPlayer.start();
+        }
+        // 状態をリセット
+        isQuestionActivityTransition = false;
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        // アクティビティ終了時にMediaPlayerとSoundPoolを解放
+        if (mediaPlayer != null) {
+            mediaPlayer.release();
+            mediaPlayer = null;
+        }
     }
 
 }

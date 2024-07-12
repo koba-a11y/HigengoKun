@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.text.method.LinkMovementMethod;
 import android.view.MenuItem;
@@ -21,6 +22,7 @@ public class DescriptionActivity extends AppCompatActivity implements Navigation
     private DrawerLayout drawerLayout;
     private ActionBarDrawerToggle toggle;
     private NavigationManager navigationManager;
+    private MediaPlayer mediaPlayer;
 
     TextView tvDescOverviewWeb;
 
@@ -32,6 +34,11 @@ public class DescriptionActivity extends AppCompatActivity implements Navigation
         drawerLayout = findViewById(R.id.drawer_layout);
         navigationManager = NavigationManager.getInstance();
         navigationManager.setDrawerLayout(findViewById(R.id.drawer_layout));
+
+        // MediaPlayerのインスタンスを作成してBGMを再生
+        mediaPlayer = MediaPlayer.create(this, R.raw.bgm_main);
+        mediaPlayer.setLooping(true);
+        mediaPlayer.start();
 
 
         //ナビゲーション(side)の設定
@@ -81,4 +88,27 @@ public class DescriptionActivity extends AppCompatActivity implements Navigation
         }
         return super.onOptionsItemSelected(item);
     }
+
+    @Override
+    protected void onPause(){
+        super.onPause();
+        // アクティビティ終了時にMediaPlayerとSoundPoolを解放
+        if (mediaPlayer != null) {
+            mediaPlayer.release();
+            mediaPlayer = null;
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        // アクティビティ終了時にMediaPlayerとSoundPoolを解放
+        if (mediaPlayer != null) {
+            mediaPlayer.release();
+            mediaPlayer = null;
+        }
+    }
+
+
+
 }

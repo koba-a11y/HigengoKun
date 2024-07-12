@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.graphics.Typeface;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.view.ContextMenu;
 import android.view.MenuInflater;
@@ -39,6 +40,7 @@ public class ResultActivity extends AppCompatActivity {
 
     private Question question;
     private List<Map<String,String>> _feedBackList;
+    private MediaPlayer mediaPlayer;
 
     SimpleDateFormat date;
 
@@ -51,6 +53,12 @@ public class ResultActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_result);
+
+        // MediaPlayerのインスタンスを作成してBGMを再生
+        mediaPlayer = MediaPlayer.create(this, R.raw.bgm_result);
+        mediaPlayer.setLooping(true);
+        mediaPlayer.start();
+
 
         //アクションバー設定
         ActionBar actionBar = getSupportActionBar();
@@ -185,5 +193,35 @@ public class ResultActivity extends AppCompatActivity {
         int position = info.position;
         TrackContextUtil util = new TrackContextUtil();
         util.setTrackContext(menu,getMenuInflater(),Question.getRecentAnswers(response.r_ID[position]));
+    }
+
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        // 画面遷移やバックグラウンドに入ったときにBGMを停止
+        if (mediaPlayer != null && mediaPlayer.isPlaying()) {
+            mediaPlayer.pause();
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        // 画面に戻ってきたときにBGMを再開
+        if (mediaPlayer != null) {
+            mediaPlayer.start();
+        }
+    }
+
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        // アクティビティ終了時にMediaPlayerとSoundPoolを解放
+        if (mediaPlayer != null) {
+            mediaPlayer.release();
+            mediaPlayer = null;
+        }
     }
 }
